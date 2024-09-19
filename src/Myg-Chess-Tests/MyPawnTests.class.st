@@ -56,6 +56,17 @@ MyPawnTests >> testMovesWithAllieObstacleDiagonal [
 ]
 
 { #category : 'tests' }
+MyPawnTests >> testMovesWithBlackPawnWhenStart [
+	| pawn  board squares |
+	board := MyChessBoard empty.
+	
+	board at: 'e7' put: (pawn := MyPawn black).
+	
+	squares := pawn targetSquares.
+	self assertCollection: squares includesAll: (#( e6 e5 ) collect: [ :name | board at: name ]).
+]
+
+{ #category : 'tests' }
 MyPawnTests >> testMovesWithNoOpponents [ 
 """ on vérifie que les pions noirs et blancs ne sont autorisés que à bouger d'une case vers l'avant"""
 		| pawnW  pawnB squaresB squaresW board |
@@ -94,4 +105,15 @@ MyPawnTests >> testMovesWithOponentObstacleDiagonalWhenPawnWhite [
 	
 
 
+]
+
+{ #category : 'tests' }
+MyPawnTests >> testMovesWithWhitePawnWhenStart [
+	| pawn  board squares |
+	board := MyChessBoard empty.
+	
+	board at: 'e2' put: (pawn := MyPawn white).
+	
+	squares := pawn targetSquares.
+	self assertCollection: squares includesAll: (#( e3 e4 ) collect: [ :name | board at: name ]).
 ]
