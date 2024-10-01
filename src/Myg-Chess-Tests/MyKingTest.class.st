@@ -34,38 +34,36 @@ MyKingTest >> testIsNotCheckBySameColorRook [
 ]
 
 { #category : 'tests' }
-MyKingTest >> testWhenIsCheckAndMoves [
+MyKingTest >> testWhenIsCheckAndMoves [ [
+    | king board whiteRook blackRook |
+    board := MyChessBoard empty.
+    board at: 'e4' put: (king := MyKing white).
+    board at: 'b3' put: (whiteRook := MyRook white).
+    board at: 'e1' put: (blackRook := MyRook black).
 
-	| king board whiteRook  blackRook|
-	board := MyChessBoard empty.
-	board at: 'e4' put: (king := MyKing white).
+    self assert: king isInCheck.
 
-	board at: 'b3' put: (whiteRook := MyRook white).
-	
-	"Put an atacker rook on e column"
-	board at: 'e1' put: (blackRook := MyRook black).
+    whiteRook moveTo: 'e3'.
+    board updateAttaques.
+    self assert: king isInCheck not.
 
-	self assert: king isInCheck.
-	
-	whiteRook moveTo: 'e3'.
-	
-	self assert: king isInCheck not.
-	
-	blackRook moveTo: 'h1'.
+    blackRook moveTo: 'h1'.
+    board updateAttaques.
+    self assert: king isInCheck not.
 
-	self assert: king isInCheck not.
-	
-	whiteRook moveTo: 'e1'.
+    whiteRook moveTo: 'e1'.
+    board updateAttaques.
+    self assert: king isInCheck not.
 
- 	self assert: king isInCheck not.	
-		
-	board at: 'd2' put: MyKnight black.
-	
-	self assert: king isInCheck.
-	
-	king moveTo: 'f4'.
-	
-	self assert: king isInCheck not.
+    board at: 'd2' put: (MyKnight black).
+    board updateAttaques.
+    self assert: king isInCheck.
+
+    king moveTo: 'f4'.
+    board updateAttaques.
+    self assert: king isInCheck not.
+]
+
 	
 	
 	

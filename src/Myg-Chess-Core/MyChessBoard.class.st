@@ -248,6 +248,13 @@ MyChessBoard >> unselectSelected [
 	selected doUnselect
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessBoard >> updateAttaques [
+	|pieces|
+	pieces := self pieces select: [ :piece | piece notNil ].
+	pieces do: [ :piece| piece updateAttaqueSquares ].
+]
+
 { #category : 'accessing' }
 MyChessBoard >> whiteColor [
 
