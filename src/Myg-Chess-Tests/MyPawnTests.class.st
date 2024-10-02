@@ -21,6 +21,25 @@ MyPawnTests >> testId [
 ]
 
 { #category : 'tests' }
+MyPawnTests >> testMoveTo [ 
+	| pawn squares board |
+	board := MyChessBoard empty.
+	board at: 'c3' put: (pawn := MyPawn white).
+	
+	squares := pawn targetSquares.
+	
+	"mon pion est positioné en c3"
+	self assert: (pawn square) equals: (board at: 'c3').
+	
+	
+	
+	"après déplacement, mon pion est positioné en c4"
+	 board at: 'c4' put: (pawn := MyPawn white).
+	self assert: (pawn square) equals: (board at: 'c4').
+	
+]
+
+{ #category : 'tests' }
 MyPawnTests >> testMoves [
 
 	| pawn squares board |
@@ -53,6 +72,29 @@ MyPawnTests >> testMovesWithAllieObstacleDiagonal [
 	self assert: pawnW targetSquares isEmpty.
 	self assert: pawnB targetSquares isEmpty.
 	
+]
+
+{ #category : 'tests' }
+MyPawnTests >> testMovesWithBlackPawnWhenCanPriseEnPassant [
+
+	| pawnW pawnB board squaresB |
+	board := MyChessBoard empty.
+
+	"On place un pion noir sur la 4eme ligne"
+	board at: 'e4' put: (pawnB := MyPawn black).
+
+	"On place un pion blanc qui avance de 2 cases"
+	board at: 'f2' put: (pawnW := MyPawn white).
+	pawnW moveTo: (board at: 'f4').
+
+	
+	"On vérifie que le pion noir peut manger le blanc ( prise en passant )"
+	squaresB := pawnB targetSquares.
+	
+	
+	self
+		assertCollection: squaresB
+		includesAll: (#(  e3 f4 ) collect: [ :name | board at: name ])
 ]
 
 { #category : 'tests' }
@@ -105,6 +147,27 @@ MyPawnTests >> testMovesWithOponentObstacleDiagonalWhenPawnWhite [
 	
 
 
+]
+
+{ #category : 'tests' }
+MyPawnTests >> testMovesWithWhitePawnWhenCanPriseEnPassant [
+
+	| pawnW pawnB board squaresW |
+	board := MyChessBoard empty.
+
+	"On place un pion blanc sur la 5eme ligne"
+	board at: 'e5' put: (pawnW := MyPawn white).
+
+	"On place un pion noir qui avance de 2 cases"
+	board at: 'f7' put: (pawnB := MyPawn black).
+	pawnB moveTo: (board at: 'f5').
+
+
+	"On vérifie que le pion blanc peut manger le noir ( prise en passant )"
+	squaresW := pawnW targetSquares.
+	self
+		assertCollection: squaresW
+		includesAll: (#( e6 f5 ) collect: [ :name | board at: name ])
 ]
 
 { #category : 'tests' }

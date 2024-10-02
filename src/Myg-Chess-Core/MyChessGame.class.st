@@ -126,8 +126,55 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
 
-	piece moveTo: square.
-	self recordMovementOf: piece to: square
+	Transcript
+		show: 'avant';
+		cr.
+	Transcript
+		show: piece square;
+		cr.
+
+	piece id = 'P'
+		ifTrue: [ "Si ma piece est un pion"
+			piece isWhite
+				ifTrue: [ "Si c'est un pion blanc "
+					piece square left = square
+						ifTrue: [ "Si il essaye de se déplacer sur la gauche"
+							Transcript
+								show: '-------';
+								cr.
+							Transcript
+								show: piece square ;
+								cr.
+								
+							piece moveTo: [square up].
+							Transcript
+								show: piece square;
+								cr.
+							Transcript
+								show: '-------';
+								cr.
+								
+							self recordMovementOf: piece to: (square up).
+							
+							]
+						ifFalse: [
+							piece moveTo: square.
+							self recordMovementOf: piece to: square ] ]
+				ifFalse: [ "Si c'est un pion noir"
+					piece moveTo: square.
+					self recordMovementOf: piece to: square ] ]
+		ifFalse: [ "Si c'est une autre pièce"
+			piece moveTo: square.
+			self recordMovementOf: piece to: square ].
+
+
+	Transcript
+		show: 'apres';
+		cr.
+
+	Transcript
+		show: piece square;
+		cr
 ]
 
 { #category : 'accessing' }
