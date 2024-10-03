@@ -49,6 +49,21 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessGame class >> protectKing [
+	self shouldBeImplemented.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> board [
+	^ board.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> board: anObject [
+	board := anObject .
+]
+
 { #category : 'playing' }
 MyChessGame >> checkForMate [
 
@@ -146,6 +161,27 @@ MyChessGame >> play [
 			moveCount := moveCount + 1.
 			currentPlayer := whitePlayer ].
 	self checkForMate
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> protectKing: aColor [
+
+	| roi roiList pieces deplacements threatenedSquares|
+	"self halt."
+	roiList := (self board pieces) select: [ :p | p isKing and: p color = aColor ].
+	roi:= roiList first.
+	roi isInCheck ifFalse: [ ^ self ].
+	threatenedSquares := roi opponentPieces flatCollect: [ :e |
+		                     e attackingSquares ].
+	deplacements := roi legalTargetSquares isEmpty and: [
+		  threatenedSquares includes: roi square ].
+	deplacements ifNil: [
+		pieces := self pieces select: [ :p | p color = aColor ]
+		 ].
+	
+	
+
+	
 ]
 
 { #category : 'moves' }

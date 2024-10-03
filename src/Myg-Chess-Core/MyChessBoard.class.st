@@ -219,8 +219,8 @@ MyChessBoard >> initializeSquares [
 
 { #category : 'accessing' }
 MyChessBoard >> pieces [
-	
-	^ children collect: [ :square | square contents ]
+	^( children collect: [ :square | square contents ] )select: [ :p | p isNil not ].
+	"^ children collect: [ :square | square contents ]"
 ]
 
 { #category : 'accessing' }
@@ -246,13 +246,6 @@ MyChessBoard >> unselectSelected [
 	
 	selected ifNil: [ ^ self ].
 	selected doUnselect
-]
-
-{ #category : 'as yet unclassified' }
-MyChessBoard >> updateAttaques [
-	|pieces|
-	pieces := self pieces select: [ :piece | piece notNil ].
-	pieces do: [ :piece| piece updateAttaqueSquares ].
 ]
 
 { #category : 'accessing' }

@@ -243,8 +243,3 @@ MyPiece >> upRightDiagonalLegal: aBoolean [
 		  collectSquares: [ :aSquare | aSquare up ifNotNil: #right ]
 		  legal: aBoolean
 ]
-
-{ #category : 'as yet unclassified' }
-MyPiece >> updateAttaqueSquares [
-	self targetSquaresLegal: true.
-]
