@@ -87,14 +87,14 @@ MyPawnTests >> testMovesWithBlackPawnWhenCanPriseEnPassant [
 	board at: 'f2' put: (pawnW := MyPawn white).
 	pawnW moveTo: (board at: 'f4').
 
-	
+
 	"On vérifie que le pion noir peut manger le blanc ( prise en passant )"
 	squaresB := pawnB targetSquares.
-	
-	
+
+
 	self
 		assertCollection: squaresB
-		includesAll: (#(  e3 f4 ) collect: [ :name | board at: name ])
+		includesAll: (#( e3 f3 ) collect: [ :name | board at: name ])
 ]
 
 { #category : 'tests' }
@@ -167,7 +167,7 @@ MyPawnTests >> testMovesWithWhitePawnWhenCanPriseEnPassant [
 	squaresW := pawnW targetSquares.
 	self
 		assertCollection: squaresW
-		includesAll: (#( e6 f5 ) collect: [ :name | board at: name ])
+		includesAll: (#( e6 f6 ) collect: [ :name | board at: name ])
 ]
 
 { #category : 'tests' }

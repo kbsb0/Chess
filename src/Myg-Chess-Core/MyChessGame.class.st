@@ -49,7 +49,7 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
-{ #category : 'playing' }
+{ #category : 'as yet unclassified' }
 MyChessGame >> checkForMate [
 
 	whitePlayer king isCheckMated ifTrue: [ self halt: 'Black wins!' ].
@@ -126,55 +126,44 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
 
-	Transcript
-		show: 'avant';
-		cr.
-	Transcript
-		show: piece square;
-		cr.
-
-	piece id = 'P'
-		ifTrue: [ "Si ma piece est un pion"
-			piece isWhite
-				ifTrue: [ "Si c'est un pion blanc "
-					piece square left = square
-						ifTrue: [ "Si il essaye de se déplacer sur la gauche"
-							Transcript
-								show: '-------';
-								cr.
-							Transcript
-								show: piece square ;
-								cr.
-								
-							piece moveTo: [square up].
-							Transcript
-								show: piece square;
-								cr.
-							Transcript
-								show: '-------';
-								cr.
-								
-							self recordMovementOf: piece to: (square up).
-							
-							]
-						ifFalse: [
-							piece moveTo: square.
-							self recordMovementOf: piece to: square ] ]
-				ifFalse: [ "Si c'est un pion noir"
-					piece moveTo: square.
-					self recordMovementOf: piece to: square ] ]
-		ifFalse: [ "Si c'est une autre pièce"
-			piece moveTo: square.
-			self recordMovementOf: piece to: square ].
+	piece id = 'P' ifTrue: [
+		piece isWhite
+			ifTrue: [
+				(piece square left notNil and: [
+					 piece square left up = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantL: true ]. "pion blanc qui se déplace en haut à gauche ou en haut à droite"
 
 
-	Transcript
-		show: 'apres';
-		cr.
+				(piece square right notNil and: [
+					 piece square right up = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantR: true ] "pion blanc qui se déplace en haut à gauche ou en haut à droite" ]
+			ifFalse: [
+				(piece square left notNil and: [
+					 piece square left down = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantL: true ]. "pion noir qui se déplace en haut à gauche ou en haut à droite"
 
-	Transcript
-		show: piece square;
-		cr
+
+				(piece square right notNil and: [
+					 piece square right down = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantR: true ] "pion noir qui se déplace en haut à gauche ou en haut à droite" ] ].
+
+
+
+
+
+	piece moveTo: square.
+	self recordMovementOf: piece to: square
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> moveW: piece to: square [
+
+	(piece square left up = square and: [ square hasPiece not ])
+		ifTrue: [
+			piece moveEnPassant: true.
+			piece moveTo: square ]
+		ifFalse: [ piece moveTo: square ].
+	self recordMovementOf: piece to: square " down"
 ]
 
 { #category : 'accessing' }
