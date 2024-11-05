@@ -1,0 +1,105 @@
+Class {
+	#name : 'MyPlayerTest',
+	#superclass : 'TestCase',
+	#category : 'Myg-Chess-Tests',
+	#package : 'Myg-Chess-Tests'
+}
+
+{ #category : 'tests' }
+MyPlayerTest >> testKingCanMoveOutOfCheck [ 
+    | player board game king blackRook1 blackRook2 |
+
+    board := MyChessBoard empty. 
+	 game := MyChessGame freshGame.
+	
+ 	 board at: 'h1' put: (king := MyKing white).
+	 board at: 'h8' put: (blackRook1 := MyRook black).
+	 board at: 'a2' put: (blackRook2 := MyRook black).
+
+    player := MyPlayer new. 
+	 player white.
+    player game: game. 
+	 player game board: board.
+	
+    self assert: king isInCheck.
+
+    player play. 
+
+    self assert: (king isInCheck) not.
+
+	 self assert: (board at: 'g1') equals: king. 
+
+
+
+
+
+]
+
+{ #category : 'tests' }
+MyPlayerTest >> testPieceCanBlockThreat [ 
+| player board game king blackRook1 blackRook2 whiteBishop|
+
+    board := MyChessBoard empty. 
+	 game := MyChessGame freshGame.
+	
+ 	 board at: 'h1' put: (king := MyKing white).
+	 board at: 'h8' put: (blackRook1 := MyRook black).
+	 board at: 'a2' put: (blackRook2 := MyRook black).
+	 board at: 'd1' put: (whiteBishop := MyBishop white).
+
+    player := MyPlayer new. 
+	 player white.
+    player game: game. 
+	 player game board: board.
+	
+    self assert: king isInCheck.
+
+    player play. 
+
+    self assert: (king isInCheck) not.
+
+	 self assert: (board at: 'h1') equals: king. 
+	 self assert: (board at: 'h5') equals: whiteBishop.
+	 self assert: (board at: 'h8') equals: blackRook1.
+	 	self assert: (board at: 'a2') equals: blackRook2.
+
+
+
+
+
+
+]
+
+{ #category : 'tests' }
+MyPlayerTest >> testPieceCanCaptureThreat [ 
+| player board game king blackRook1 blackRook2 whiteBishop|
+
+    board := MyChessBoard empty. 
+	 game := MyChessGame freshGame.
+	
+ 	 board at: 'h1' put: (king := MyKing white).
+	 board at: 'h5' put: (blackRook1 := MyRook black).
+	 board at: 'a2' put: (blackRook2 := MyRook black).
+	 board at: 'd1' put: (whiteBishop := MyBishop white).
+
+    player := MyPlayer new. 
+	 player white.
+    player game: game. 
+	 player game board: board.
+	
+    self assert: king isInCheck.
+
+    player play. 
+
+    self assert: (king isInCheck) not.
+
+	 self assert: (board at: 'h1') equals: king. 
+	 self assert: (board at: 'h5') equals: whiteBishop.
+	 self assert: (board at: 'a2') equals: blackRook2.
+
+
+
+
+
+
+]
