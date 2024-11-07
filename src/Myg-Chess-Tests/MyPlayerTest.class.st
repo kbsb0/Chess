@@ -74,7 +74,7 @@ MyPlayerTest >> testPieceCanBlockThreat [
 
 { #category : 'tests' }
 MyPlayerTest >> testPieceCanCaptureThreat [ 
-| player board game king blackRook1 blackRook2 whiteBishop|
+| player board game king blackRook1 blackRook2 whiteBishop blackQueen|
 
     board := MyChessBoard empty. 
 	 game := MyChessGame freshGame.
@@ -83,6 +83,7 @@ MyPlayerTest >> testPieceCanCaptureThreat [
 	 board at: 'h5' put: (blackRook1 := MyRook black).
 	 board at: 'a2' put: (blackRook2 := MyRook black).
 	 board at: 'd1' put: (whiteBishop := MyBishop white).
+	 board at: 'g8' put: (blackQueen := MyQueen black).
 
     player := MyPlayer new. 
 	 player white.
@@ -98,6 +99,8 @@ MyPlayerTest >> testPieceCanCaptureThreat [
 	 self assert: (board locate: 'h1') equals: king. 
 	 self assert: (board locate: 'h5') equals: whiteBishop.
 	 self assert: (board locate: 'a2') equals: blackRook2.
+		 self assert: (board locate: 'g8') equals: blackQueen.
+
 
 
 

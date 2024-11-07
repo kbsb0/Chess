@@ -59,8 +59,9 @@ MyPlayer >> pieces [
 
 { #category : 'playing' }
 MyPlayer >> play [
-    | pieces king threateningPieces blockingSquares |
+    | pieces king threateningPieces blockingSquares menace|
     
+	 menace := false.
     king := self king.
     
     "On vérifie si le roi est en échec, si c'est le cas alors on identifie les pièces menaçantes"
@@ -84,6 +85,7 @@ MyPlayer >> play [
                 canBlock := blockingSquares anySatisfy: [:blockSquare | 
                     (piece legalTargetSquares includes: blockSquare)
                 ].
+ 					menace := canBlock or: canCapture.
 					"Est-ce que le roi peut se délpacer ?"
                 canMove := (piece = king and: [(king legalTargetSquares notEmpty)]).
                 canCapture or: [canBlock or: [canMove]]
@@ -91,7 +93,7 @@ MyPlayer >> play [
         ]
         ifFalse: [ self pieces copy asOrderedCollection ].
 
-		"déplacement des pièces"
+		"déplacement des pièces (aléatoirement !!!!)"
     [ pieces notEmpty ] whileTrue: [
         | piece legalMoves |
         piece := pieces atRandom.
