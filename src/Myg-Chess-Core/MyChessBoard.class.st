@@ -217,6 +217,15 @@ MyChessBoard >> initializeSquares [
 		black := black not ]
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessBoard >> locate: coordinate [
+ | square |
+	square := grid at: coordinate.
+	^ square contents.
+
+
+]
+
 { #category : 'accessing' }
 MyChessBoard >> pieces [
 	^( children collect: [ :square | square contents ] )select: [ :p | p isNil not ].

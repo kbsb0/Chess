@@ -27,7 +27,7 @@ MyPlayerTest >> testKingCanMoveOutOfCheck [
 
     self assert: (king isInCheck) not.
 
-	 self assert: (board at: 'g1') equals: king. 
+	 self assert: (board locate: 'g1') equals: king. 
 
 
 
@@ -37,7 +37,7 @@ MyPlayerTest >> testKingCanMoveOutOfCheck [
 
 { #category : 'tests' }
 MyPlayerTest >> testPieceCanBlockThreat [ 
-| player board game king blackRook1 blackRook2 whiteBishop|
+| player board game king blackRook1 blackRook2 whiteBishop  blackQueen|
 
     board := MyChessBoard empty. 
 	 game := MyChessGame freshGame.
@@ -46,6 +46,7 @@ MyPlayerTest >> testPieceCanBlockThreat [
 	 board at: 'h8' put: (blackRook1 := MyRook black).
 	 board at: 'a2' put: (blackRook2 := MyRook black).
 	 board at: 'd1' put: (whiteBishop := MyBishop white).
+	 board at: 'g8' put: (blackQueen := MyQueen black).
 
     player := MyPlayer new. 
 	 player white.
@@ -58,10 +59,11 @@ MyPlayerTest >> testPieceCanBlockThreat [
 
     self assert: (king isInCheck) not.
 
-	 self assert: (board at: 'h1') equals: king. 
-	 self assert: (board at: 'h5') equals: whiteBishop.
-	 self assert: (board at: 'h8') equals: blackRook1.
-	 	self assert: (board at: 'a2') equals: blackRook2.
+	 self assert: (board locate: 'h1') equals: king. 
+	 self assert: (board locate: 'h5') equals: whiteBishop.
+	 self assert: (board locate: 'h8') equals: blackRook1.
+	 self assert: (board locate: 'a2') equals: blackRook2.
+	 self assert: (board locate: 'g8') equals: blackQueen.
 
 
 
@@ -93,9 +95,9 @@ MyPlayerTest >> testPieceCanCaptureThreat [
 
     self assert: (king isInCheck) not.
 
-	 self assert: (board at: 'h1') equals: king. 
-	 self assert: (board at: 'h5') equals: whiteBishop.
-	 self assert: (board at: 'a2') equals: blackRook2.
+	 self assert: (board locate: 'h1') equals: king. 
+	 self assert: (board locate: 'h5') equals: whiteBishop.
+	 self assert: (board locate: 'a2') equals: blackRook2.
 
 
 
