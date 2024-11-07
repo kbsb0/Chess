@@ -69,54 +69,37 @@ MyPawn >> moveTo: aSquare [
 
 	| oldFile nbSquareMove |
 	oldFile := square file.
-	"super moveTo: aSquare."
 
-	"------"
 
 	"PRISE EN PASSANT A GAUCHE"
+	self moveEnPassantL ifTrue: [
+		(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
+		square emptyContents.
+		square left emptyContents.
+		square := aSquare.
+		aSquare contents: self.
+		self moveEnPassantL: false.
+		^ self ].
 
 
-
-	
-
-				self moveEnPassantL ifTrue: [
-			(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-			square emptyContents.
-			square left emptyContents.
-			square := aSquare.
-			aSquare contents: self.
-			self moveEnPassantL: false.
-			^ self ].
-
-
-		"PRISE EN PASSANT A DROITE"
-		self moveEnPassantR ifTrue: [
-			(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-			square emptyContents.
-			square right emptyContents.
-			square := aSquare.
-			aSquare contents: self.
-			self moveEnPassantR: false.
-			^ self ].
-		
-		
-		
-
-
-
-
-
+	"PRISE EN PASSANT A DROITE"
+	self moveEnPassantR ifTrue: [
+		(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
+		square emptyContents.
+		square right emptyContents.
+		square := aSquare.
+		aSquare contents: self.
+		self moveEnPassantR: false.
+		^ self ].
 
 
 
 	(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-
 	square emptyContents.
 	square := aSquare.
 	aSquare contents: self.
-	"------"
 
-
+	" on précise si le pion vient d'avancer de deux cases"
 	nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
 	self movesForward2: nbSquareMove = 2
 ]
