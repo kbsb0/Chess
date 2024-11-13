@@ -49,7 +49,27 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
-{ #category : 'playing' }
+{ #category : 'tests' }
+MyChessGame >> btn: window square: square [
+
+	| queenBtn |
+	queenBtn := ToButton new.
+
+
+	queenBtn labelText: 'DAME'.
+
+	queenBtn whenClickedDo: [
+		window close.
+		square contents: ( MyQueen new ).
+
+		Transcript
+			show: 'ok';
+			cr ].
+
+	^ queenBtn
+]
+
+{ #category : 'as yet unclassified' }
 MyChessGame >> checkForMate [
 
 	whitePlayer king isCheckMated ifTrue: [ self halt: 'Black wins!' ].
@@ -126,8 +146,48 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
 
+	piece id = 'P' ifTrue: [
+		piece isWhite
+			ifTrue: [
+				(piece square left notNil and: [
+					 piece square left up = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantL: true ]. "pion blanc qui se déplace en haut à gauche ou en haut à droite"
+
+
+				(piece square right notNil and: [
+					 piece square right up = square and: [ square hasPiece not ] ])
+					ifTrue: [ "pion blanc qui se déplace en haut à gauche ou en haut à droite"
+						piece moveEnPassantR: true ] ]
+			ifFalse: [
+				(piece square left notNil and: [
+					 piece square left down = square and: [ square hasPiece not ] ])
+					ifTrue: [ piece moveEnPassantL: true ]. "pion noir qui se déplace en haut à gauche ou en haut à droite"
+
+
+				(piece square right notNil and: [
+					 piece square right down = square and: [ square hasPiece not ] ])
+					ifTrue: [ "pion noir qui se déplace en haut à gauche ou en haut à droite"
+						piece moveEnPassantR: true ] ] ].
+
+
+
+
+
 	piece moveTo: square.
+	
+	piece id = 'P' ifTrue: [  self promotion: piece  ].
 	self recordMovementOf: piece to: square
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> moveW: piece to: square [
+
+	(piece square left up = square and: [ square hasPiece not ])
+		ifTrue: [
+			piece moveEnPassant: true.
+			piece moveTo: square ]
+		ifFalse: [ piece moveTo: square ].
+	self recordMovementOf: piece to: square " down"
 ]
 
 { #category : 'accessing' }
@@ -146,6 +206,34 @@ MyChessGame >> play [
 			moveCount := moveCount + 1.
 			currentPlayer := whitePlayer ].
 	self checkForMate
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> promotion: piece [
+
+	| onLastFile space pane window |
+	Transcript
+		show: piece square file;
+		cr.
+
+
+
+	onLastFile := piece isWhite
+		              ifTrue: [ piece square up isNil ]
+		              ifFalse: [ piece square down isNil ].
+
+	onLastFile ifTrue: [
+		Transcript
+			show: 'Le pion peut etre promue';
+			cr.
+
+
+		pane := ToPane vertical.
+		window := BlSpace new.
+
+		pane addChild: (self btn: window square: piece square).
+		window root addChild: pane.
+		window show ]
 ]
 
 { #category : 'moves' }
