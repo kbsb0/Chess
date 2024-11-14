@@ -80,7 +80,7 @@ MyPlayer >> play [
                     (piece legalTargetSquares includes: threat square)
                 ].
 					"méthode pour obtenir les cases qui permetterait de bloquer l'attaque"
-                blockingSquares := king blockingSquaresToPreventCheck.
+                blockingSquares := self pieces blockingSquaresToPreventCheck.
 					"Est-ce que la pièce peut aller sur les cases qui permettent de bloquer l'attaque"
                 canBlock := blockingSquares anySatisfy: [:blockSquare | 
                     (piece legalTargetSquares includes: blockSquare)

@@ -27,25 +27,6 @@ MyKing >> basicTargetSquares [
 	}
 ]
 
-{ #category : 'as yet unclassified' }
-MyKing >> blockingSquaresToPreventCheck [
-    | blockingSquares |
-    blockingSquares := OrderedCollection new.
-    
-    "On récupère les pièces menaçantes"
-    self threateningPieces do: [:threat |
-        "On récupère les cases attaquées par cette pièce"
-        threat attackingSquares do: [:square |
-            "On vérifie si le roi peut se déplacer sur cette case pour bloquer l'attaque"
-            (self legalTargetSquares includes: square) ifTrue: [
-                blockingSquares add: square.
-            ].
-        ].
-    ].
-
-    ^ blockingSquares asOrderedCollection.
-]
-
 { #category : 'accessing' }
 MyKing >> id [
 	
