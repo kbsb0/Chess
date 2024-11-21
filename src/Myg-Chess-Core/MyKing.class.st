@@ -106,3 +106,13 @@ MyKing >> threateningPieces [
     ].
     ^ attackingPieces.
 ]
+
+{ #category : 'as yet unclassified' }
+MyKing >> threateningSquares [
+
+   | threateningPieces threateningPiece threateningSquares|
+    threateningPieces := self threateningPieces.
+	 threateningPiece := threateningPieces first.
+	 threateningSquares := threateningPiece targetSquaresLegal: true.
+    ^ threateningSquares.
+]

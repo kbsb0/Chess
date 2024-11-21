@@ -72,26 +72,24 @@ MyPlayer >> play [
     "Si le roi est en échec, on doit trouver les pièces qui protègent le roi"
     pieces := king isInCheck
         ifTrue: [ 
+				menace := true.
             "On doit essayer de déplacer une pièce pour protéger le roi"
             (self pieces select: [:piece | 
                 | canCapture canBlock canMove |
 					"Est-ce que la pièce peut capturer une pièce menaçante ?"
                 canCapture := threateningPieces anySatisfy: [:threat | 
-                    (piece legalTargetSquares includes: threat square)
-						
+                    (piece legalTargetSquares includes: threat square)				
                 ].
-					menace := true.
-					"méthode pour obtenir les cases qui permetterait de bloquer l'attaque
-                blockingSquares := self pieces blockingSquaresToPreventCheck.
-					Est-ce que la pièce peut aller sur les cases qui permettent de bloquer l'attaque
+					"méthode pour obtenir les cases qui permetterait de bloquer l'attaque"
+                blockingSquares := king threateningSquares.
+					"Est-ce que la pièce peut aller sur les cases qui permettent de bloquer l'attaque"
                 canBlock := blockingSquares anySatisfy: [:blockSquare | 
                     (piece legalTargetSquares includes: blockSquare)
-                ]."
+                ].
 					"Est-ce que le roi peut se délpacer ?"
                 canMove := (piece = king and: [(king legalTargetSquares notEmpty)]).
 					canMove  ifTrue: [menace := false].
-                "canCapture or: [canBlock or: [canMove]]"
-					 canCapture or: canMove
+                canCapture or: [canBlock or: [canMove]]
             ]) asOrderedCollection 
         ]
         ifFalse: [ self pieces copy asOrderedCollection ].
