@@ -168,7 +168,8 @@ MyPiece >> moveTo: aSquare [
 
 	square emptyContents.
 	square := aSquare.
-	aSquare down contents: self
+	aSquare contents: self.
+
 ]
 
 { #category : 'rendering' }

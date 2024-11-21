@@ -136,7 +136,8 @@ MyChessGame >> move: piece to: square [
 
 				(piece square right notNil and: [
 					 piece square right up = square and: [ square hasPiece not ] ])
-					ifTrue: [ piece moveEnPassantR: true ] "pion blanc qui se déplace en haut à gauche ou en haut à droite" ]
+					ifTrue: [ "pion blanc qui se déplace en haut à gauche ou en haut à droite"
+						piece moveEnPassantR: true ] ]
 			ifFalse: [
 				(piece square left notNil and: [
 					 piece square left down = square and: [ square hasPiece not ] ])
@@ -145,7 +146,8 @@ MyChessGame >> move: piece to: square [
 
 				(piece square right notNil and: [
 					 piece square right down = square and: [ square hasPiece not ] ])
-					ifTrue: [ piece moveEnPassantR: true ] "pion noir qui se déplace en haut à gauche ou en haut à droite" ] ].
+					ifTrue: [ "pion noir qui se déplace en haut à gauche ou en haut à droite"
+						piece moveEnPassantR: true ] ] ].
 
 
 

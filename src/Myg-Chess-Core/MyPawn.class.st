@@ -93,7 +93,6 @@ MyPawn >> moveTo: aSquare [
 		^ self ].
 
 
-
 	(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
 	square emptyContents.
 	square := aSquare.
