@@ -36,6 +36,31 @@ MyPlayerTest >> testKingCanMoveOutOfCheck [
 ]
 
 { #category : 'tests' }
+MyPlayerTest >> testKingMovesWhenNotInCheck [
+    | player board game king whitePawn |
+
+    board := MyChessBoard empty.
+    game := MyChessGame freshGame.
+    
+    board at: 'h1' put: (king := MyKing white).
+    board at: 'h2' put: (whitePawn := MyPawn white).
+
+    player := MyPlayer new.
+    player white.
+    player game: game.
+    player game board: board.
+    
+    self assert: king isInCheck not.
+    
+    player play.
+
+	"assert false: le roi est en h1 et le pion est en h2 (une des deux pièces a bougé)"
+    self deny: ((board locate: 'h1') = king and: [(board locate: 'h2') = whitePawn]).
+    self assert: king isInCheck not.
+    
+]
+
+{ #category : 'tests' }
 MyPlayerTest >> testPieceCanBlockThreat [ 
 | player board game king blackRook1 blackRook2 whiteBishop  blackQueen|
 

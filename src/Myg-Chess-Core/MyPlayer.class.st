@@ -59,15 +59,13 @@ MyPlayer >> pieces [
 
 { #category : 'playing' }
 MyPlayer >> play [
-    | pieces king threateningPieces blockingSquares menace toAdd addingPosition|
+    | pieces king threateningPieces blockingSquares menace toCapture toBlock|
     
 	 menace := false.
     king := self king.
     
-    "On vérifie si le roi est en échec, si c'est le cas alors on identifie les pièces menaçantes"
-    threateningPieces := king isInCheck
-        ifTrue: [ king threateningPieces ]
-        ifFalse: [ #() ].
+    "Méthode qui va chercher les pièces qui menacent le roi"
+    threateningPieces := self threateningPieces: king.
 
     "Si le roi est en échec, on doit trouver les pièces qui protègent le roi"
     pieces := king isInCheck
@@ -94,22 +92,53 @@ MyPlayer >> play [
         ]
         ifFalse: [ self pieces copy asOrderedCollection ].
 
-		"déplacement des pièces"
+	 "Déplacement des pièces"
     [ pieces notEmpty ] whileTrue: [
-        | piece legalMoves |
+        | piece targetSquare legalMoves|
         piece := pieces atRandom.
         pieces remove: piece.
-		menace ifTrue: [ legalMoves := OrderedCollection new. 
-			toAdd := threateningPieces atRandom.
-			addingPosition := toAdd square .
-			legalMoves add: addingPosition ]
-		 ifFalse: [legalMoves := piece legalTargetSquares].
+
+        menace ifTrue: [
+            "on essaye de capturer la menace"
+            toCapture := threateningPieces detect: [:threat | 
+                (piece legalTargetSquares includes: threat square)
+            ] ifNone: [ nil ].
+
+            toCapture ifNotNil: [
+                targetSquare := toCapture square.
+                game move: piece to: targetSquare.
+                ^self.
+            ].
+
+            "Sinon on essaye de bloquer l'attaque"
+            toBlock := blockingSquares detect: [:blockSquare |
+                (piece legalTargetSquares includes: blockSquare)
+            ] ifNone: [ nil ].
+
+            toBlock ifNotNil: [
+                targetSquare := toBlock.
+                game move: piece to: targetSquare.
+                ^self.
+            ].
+        ].
+
+        "S'il n'y a pas de menaces on déplace la pièce de façon aléatoire"
+        legalMoves := piece legalTargetSquares.
         legalMoves ifNotEmpty: [
             game move: piece to: legalMoves atRandom.
-            ^ self] ].
+            ^self.
+        ].
+    ].
 
     self halt: 'NO MOVES AVAILABLE!'.
+]
 
+{ #category : 'as yet unclassified' }
+MyPlayer >> threateningPieces: aKing [
+
+^ aKing isInCheck
+        ifTrue: [ aKing threateningPieces ]
+        ifFalse: [ #() ].
 ]
 
 { #category : 'constants' }
