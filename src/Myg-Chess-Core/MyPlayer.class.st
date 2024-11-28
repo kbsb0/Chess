@@ -136,9 +136,8 @@ MyPlayer >> play [
 { #category : 'as yet unclassified' }
 MyPlayer >> threateningPieces: aKing [
 
-^ aKing isInCheck
-        ifTrue: [ aKing threateningPieces ]
-        ifFalse: [ #() ].
+^ aKing threateningPieces.
+
 ]
 
 { #category : 'constants' }

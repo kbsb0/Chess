@@ -96,7 +96,9 @@ MyKing >> targetSquaresLegal: aBoolean [
 { #category : 'as yet unclassified' }
 MyKing >> threateningPieces [
     | attackingPieces |
-    attackingPieces := OrderedCollection new.
+
+     self isInCheck
+        ifTrue: [ attackingPieces := OrderedCollection new.
     "On parcoure toutes les pièces adverses"
     (self opponentPieces) do: [:piece |
         "on vérifie si la pièce peut attaquer le roi"
@@ -104,7 +106,9 @@ MyKing >> threateningPieces [
             attackingPieces add: piece.
         ].
     ].
-    ^ attackingPieces.
+    ^ attackingPieces. ]
+        ifFalse: [ #() ].
+    
 ]
 
 { #category : 'as yet unclassified' }
