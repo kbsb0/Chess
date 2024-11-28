@@ -59,10 +59,11 @@ MyPlayer >> pieces [
 
 { #category : 'playing' }
 MyPlayer >> play [
-    | pieces king threateningPieces blockingSquares menace toCapture toBlock|
+    | pieces king threateningPieces blockingSquares menace toCapture toBlock strategy |
     
 	 menace := false.
     king := self king.
+    strategy := MyGameDefaultMove new.
     
     "Méthode qui va chercher les pièces qui menacent le roi"
     threateningPieces := self threateningPieces: king.
@@ -86,7 +87,7 @@ MyPlayer >> play [
                 ].
 					"Est-ce que le roi peut se délpacer ?"
                 canMove := (piece = king and: [(king legalTargetSquares notEmpty)]).
-					canMove  ifTrue: [menace := false].
+					 canMove  ifTrue: [menace := false].
                 canCapture or: [canBlock or: [canMove]]
             ]) asOrderedCollection 
         ]
