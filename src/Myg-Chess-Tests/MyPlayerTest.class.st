@@ -1,6 +1,9 @@
 Class {
 	#name : 'MyPlayerTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'player'
+	],
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
 }
@@ -9,17 +12,18 @@ Class {
 MyPlayerTest >> testKingCanMoveOutOfCheck [ 
     | player board game king blackRook1 blackRook2 |
 
-    board := MyChessBoard empty. 
-	 game := MyChessGame freshGame.
-	
- 	 board at: 'h1' put: (king := MyKing white).
+	 board := MyChessBoard empty.
+    game := MyChessGame freshGame.
+
+    board at: 'h1' put: (king := MyKing white).
+    
+    player := MyPlayer new.
+    player white.
+    player game: game.
+    game board: board.
+
 	 board at: 'h8' put: (blackRook1 := MyRook black).
 	 board at: 'a2' put: (blackRook2 := MyRook black).
-
-    player := MyPlayer new. 
-	 player white.
-    player game: game. 
-	 player game board: board.
 	
     self assert: king isInCheck.
 
@@ -48,13 +52,13 @@ MyPlayerTest >> testKingMovesWhenNotInCheck [
     player := MyPlayer new.
     player white.
     player game: game.
-    player game board: board.
+	 game board: board.
     
     self assert: king isInCheck not.
     
     player play.
 
-	"assert false: le roi est en h1 et le pion est en h2 (une des deux pièces a bougé)"
+	"assert false: le roi est en h1 et le pion est en h2 (une des deux pièces s'est donc déplacé)"
     self deny: ((board locate: 'h1') = king and: [(board locate: 'h2') = whitePawn]).
     self assert: king isInCheck not.
     
@@ -76,7 +80,7 @@ MyPlayerTest >> testPieceCanBlockThreatAndDontMove [
     player := MyPlayer new. 
 	 player white.
     player game: game. 
-	 player game board: board.
+	 game board: board.
 	
     self assert: king isInCheck.
 
@@ -113,7 +117,7 @@ MyPlayerTest >> testPieceCanBlockThreatAndMove [
     player := MyPlayer new. 
 	 player white.
     player game: game. 
-	 player game board: board.
+	 game board: board.
 	
     self assert: king isInCheck.
 
@@ -150,7 +154,7 @@ MyPlayerTest >> testPieceCanCaptureThreat [
     player := MyPlayer new. 
 	 player white.
     player game: game. 
-	 player game board: board.
+	 game board: board.
 	
     self assert: king isInCheck.
 
@@ -187,7 +191,7 @@ MyPlayerTest >> testPieceCanCaptureThreatAndMove [
     player := MyPlayer new. 
 	 player white.
     player game: game. 
-	 player game board: board.
+	 game board: board.
 	
     self assert: king isInCheck.
 
