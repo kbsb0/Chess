@@ -148,6 +148,14 @@ MyChessGame >> play [
 	self checkForMate
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessGame >> promotionWindow [ 
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"
+
+	
+]
+
 { #category : 'moves' }
 MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	"moves add: (MyMove piece: aPiece square: aSquare name)."

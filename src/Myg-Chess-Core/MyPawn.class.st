@@ -11,6 +11,17 @@ MyPawn >> id [
 	^ 'P'
 ]
 
+{ #category : 'as yet unclassified' }
+MyPawn >> inTheLastFile [
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"
+
+	self isWhite 
+		ifTrue: [ ^ self square up isNil ]
+		ifFalse: [ ^ self square down isNil ]			
+		
+]
+
 { #category : 'rendering' }
 MyPawn >> renderPieceOn: aSquare [ 
 	
