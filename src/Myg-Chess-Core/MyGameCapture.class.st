@@ -6,27 +6,31 @@ Class {
 }
 
 { #category : 'public' }
-MyGameCapture >> handleRequest: aPlayer [ 
-    | king threateningPieces toCapture |
-    king := aPlayer king.
-    threateningPieces := aPlayer threateningPieces: king.
+MyGameCapture >> handleRequest: aPlayer [
 
-    threateningPieces ifNotEmpty: [
-        "on recherche une pièce pour capturer une menace"
-        toCapture := threateningPieces detect: [:threat | 
-            (aPlayer pieces anySatisfy: [:piece | 
-                (piece legalTargetSquares includes: threat square)
-            ])
-        ] ifNone: [ nil ].
+	| king threateningPieces toCapture playerGame |
+	king := self setKing: aPlayer.
+	threateningPieces := self threateningPieces: aPlayer for: king.
+	playerGame := self setGame: aPlayer.
 
-        toCapture ifNotNil: [
-            | pieceToMove |
-            pieceToMove := aPlayer pieces detect: [:piece | 
-                (piece legalTargetSquares includes: toCapture square)
-            ].
-            aPlayer game move: pieceToMove to: toCapture square.
-            ^ true 
-        ].
-    ].
-    ^ false
+	threateningPieces ifNotEmpty: [ "on recherche une pièce pour capturer une menace"
+		toCapture := threateningPieces
+			             detect: [ :threat |
+				             aPlayer pieces anySatisfy: [ :piece |
+					             piece legalTargetSquares includes: threat square ] ]
+			             ifNone: [ nil ].
+
+		toCapture ifNotNil: [
+			| pieceToMove |
+			pieceToMove := aPlayer pieces detect: [ :piece |
+				               piece legalTargetSquares includes: toCapture square ].
+			playerGame move: pieceToMove to: toCapture square.
+			^ true ] ].
+	^ false
+]
+
+{ #category : 'as yet unclassified' }
+MyGameCapture >> threateningPieces: aPlayer for: aKing [
+
+	^ aPlayer threateningPieces: aKing
 ]

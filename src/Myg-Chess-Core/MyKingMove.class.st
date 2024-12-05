@@ -6,18 +6,16 @@ Class {
 }
 
 { #category : 'public' }
-MyKingMove >> handleRequest: aPlayer [ 
-    | king legalMoves |
-    king := aPlayer king.
+MyKingMove >> handleRequest: aPlayer [
 
-    "si le roi est en échec, on tente de le déplacer"
-    king isInCheck ifTrue: [
-        legalMoves := king legalTargetSquares.
-        legalMoves ifNotEmpty: [
-            aPlayer game move: king to: legalMoves atRandom.
-            ^ true 
-        ].
-    ].
+	| king legalMoves |
+	king := self setKing: aPlayer.
+	"si le roi est en échec, on tente de le déplacer"
+	king isInCheck ifTrue: [
+		legalMoves := king legalTargetSquares.
+		legalMoves ifNotEmpty: [
+			aPlayer game move: king to: legalMoves atRandom.
+			^ true ] ].
 
-    ^ false
+	^ false
 ]

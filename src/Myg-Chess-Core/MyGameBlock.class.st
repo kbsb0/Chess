@@ -6,27 +6,25 @@ Class {
 }
 
 { #category : 'public' }
-MyGameBlock >> handleRequest: aPlayer [ 
-    | king blockingSquares toBlock pieceToMove |
-    king := aPlayer king.
-    blockingSquares := king threateningSquares.
+MyGameBlock >> handleRequest: aPlayer [
 
-    blockingSquares ifNotEmpty: [
-        "on cherche une pièce qui peut bloquer la menace"
-        toBlock := blockingSquares detect: [:blockSquare |
-            (aPlayer pieces anySatisfy: [:piece | 
-                (piece legalTargetSquares includes: blockSquare)
-            ])
-        ] ifNone: [ nil ].
+	| king blockingSquares toBlock pieceToMove game |
+	king := self setKing: aPlayer.
+	game := self setGame: aPlayer.
+	blockingSquares := king threateningSquares.
 
-        toBlock ifNotNil: [
-            pieceToMove := aPlayer pieces detect: [:piece | 
-                (piece legalTargetSquares includes: toBlock)
-            ].
-            aPlayer game move: pieceToMove to: toBlock.
-            ^ true 
-        ].
-    ].
+	blockingSquares ifNotEmpty: [ "on cherche une pièce qui peut bloquer la menace"
+		toBlock := blockingSquares
+			           detect: [ :blockSquare |
+				           aPlayer pieces anySatisfy: [ :piece |
+					           piece legalTargetSquares includes: blockSquare ] ]
+			           ifNone: [ nil ].
 
-    ^ false
+		toBlock ifNotNil: [
+			pieceToMove := aPlayer pieces detect: [ :piece |
+				               piece legalTargetSquares includes: toBlock ].
+			game move: pieceToMove to: toBlock.
+			^ true ] ].
+
+	^ false
 ]

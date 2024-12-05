@@ -10,7 +10,19 @@ Class {
 }
 
 { #category : 'accessing' }
-MyGameMove >> handle: aPlayer [ 
-    ^ false
+MyGameMove >> handle: aPlayer [
 
+	^ false
+]
+
+{ #category : 'initialization' }
+MyGameMove >> setGame: aPlayer [
+
+	^ aPlayer game
+]
+
+{ #category : 'initialization' }
+MyGameMove >> setKing: aPlayer [
+
+	^ aPlayer king
 ]

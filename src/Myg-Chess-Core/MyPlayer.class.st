@@ -58,24 +58,25 @@ MyPlayer >> pieces [
 ]
 
 { #category : 'playing' }
-MyPlayer >> play [ 
-    | handlers |
-    handlers := OrderedCollection new.
-    handlers add: MyGameCapture new.
-    handlers add: MyGameBlock new.
-    handlers add: MyGameDefaultMove new.
-    handlers add: MyKingMove new.
+MyPlayer >> play [
 
-    handlers detect: [:handler | handler handleRequest: self] ifNone: [
-        self halt: 'NO MOVES AVAILABLE!'
-    ].
+	| handlers |
+	handlers := OrderedCollection new.
+	handlers add: MyGameCapture new.
+	handlers add: MyGameBlock new.
+	handlers add: MyKingMove new.
+	handlers add: MyGameDefaultMove new.
+
+
+	handlers
+		detect: [ :handler | handler handleRequest: self ]
+		ifNone: [ self halt: 'NO MOVES AVAILABLE!' ]
 ]
 
 { #category : 'as yet unclassified' }
 MyPlayer >> threateningPieces: aKing [
 
-^ aKing threateningPieces.
-
+	^ aKing threateningPieces
 ]
 
 { #category : 'constants' }

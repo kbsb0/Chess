@@ -2,212 +2,140 @@ Class {
 	#name : 'MyPlayerTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'player'
+		'player',
+		'board',
+		'game',
+		'king'
 	],
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
 }
 
 { #category : 'tests' }
-MyPlayerTest >> testKingCanMoveOutOfCheck [ 
-    | player board game king blackRook1 blackRook2 |
+MyPlayerTest >> setUp [
 
-	 board := MyChessBoard empty.
-    game := MyChessGame freshGame.
+	super setUp.
+	board := MyChessBoard empty.
+	game := MyChessGame freshGame.
 
-    board at: 'h1' put: (king := MyKing white).
-    
-    player := MyPlayer new.
-    player white.
-    player game: game.
-    game board: board.
+	board at: 'h1' put: (king := MyKing white).
 
-	 board at: 'h8' put: (blackRook1 := MyRook black).
-	 board at: 'a2' put: (blackRook2 := MyRook black).
-	
-    self assert: king isInCheck.
+	player := MyPlayer new.
+	player white.
+	player game: game.
+	game board: board
+]
 
-    player play. 
+{ #category : 'tests' }
+MyPlayerTest >> testKingCanMoveOutOfCheck [
 
-    self assert: (king isInCheck) not.
+	| blackRook1 blackRook2 |
+	board at: 'h8' put: (blackRook1 := MyRook black).
+	board at: 'a2' put: (blackRook2 := MyRook black).
 
-	 self assert: (board locate: 'g1') equals: king. 
+	self assert: king isInCheck.
 
+	player play.
 
+	self assert: king isInCheck not.
 
-
-
+	self assert: (board locate: 'g1') equals: king
 ]
 
 { #category : 'tests' }
 MyPlayerTest >> testKingMovesWhenNotInCheck [
-    | player board game king whitePawn |
 
-    board := MyChessBoard empty.
-    game := MyChessGame freshGame.
-    
-    board at: 'h1' put: (king := MyKing white).
-    board at: 'h2' put: (whitePawn := MyPawn white).
+	| whitePawn |
+	self assert: king isInCheck not.
 
-    player := MyPlayer new.
-    player white.
-    player game: game.
-	 game board: board.
-    
-    self assert: king isInCheck not.
-    
-    player play.
+	player play.
 
 	"assert false: le roi est en h1 et le pion est en h2 (une des deux pièces s'est donc déplacé)"
-    self deny: ((board locate: 'h1') = king and: [(board locate: 'h2') = whitePawn]).
-    self assert: king isInCheck not.
-    
+	self deny:
+		((board locate: 'h1') = king and: [
+			 (board locate: 'h2') = whitePawn ]).
+	self assert: king isInCheck not
 ]
 
 { #category : 'tests' }
-MyPlayerTest >> testPieceCanBlockThreatAndDontMove [ 
-| player board game king blackRook1 blackRook2 whiteBishop  blackQueen|
+MyPlayerTest >> testPieceCanBlockThreatAndDontMove [
 
-    board := MyChessBoard empty. 
-	 game := MyChessGame freshGame.
-	
- 	 board at: 'h1' put: (king := MyKing white).
-	 board at: 'h8' put: (blackRook1 := MyRook black).
-	 board at: 'a2' put: (blackRook2 := MyRook black).
-	 board at: 'd1' put: (whiteBishop := MyBishop white).
-	 board at: 'g8' put: (blackQueen := MyQueen black).
+	| blackRook1 blackRook2 whiteBishop blackQueen |
+	board at: 'h8' put: (blackRook1 := MyRook black).
+	board at: 'a2' put: (blackRook2 := MyRook black).
+	board at: 'd1' put: (whiteBishop := MyBishop white).
+	board at: 'g8' put: (blackQueen := MyQueen black).
 
-    player := MyPlayer new. 
-	 player white.
-    player game: game. 
-	 game board: board.
-	
-    self assert: king isInCheck.
+	self assert: king isInCheck.
 
-    player play. 
+	player play.
 
-    self assert: (king isInCheck) not.
+	self assert: king isInCheck not.
 
-	 self assert: (board locate: 'h1') equals: king. 
-	 self assert: (board locate: 'h5') equals: whiteBishop.
-	 self assert: (board locate: 'h8') equals: blackRook1.
-	 self assert: (board locate: 'a2') equals: blackRook2.
-	 self assert: (board locate: 'g8') equals: blackQueen.
-
-
-
-
-
-
+	self assert: (board locate: 'h1') equals: king.
+	self assert: (board locate: 'h5') equals: whiteBishop.
+	self assert: (board locate: 'h8') equals: blackRook1.
+	self assert: (board locate: 'a2') equals: blackRook2.
+	self assert: (board locate: 'g8') equals: blackQueen
 ]
 
 { #category : 'tests' }
-MyPlayerTest >> testPieceCanBlockThreatAndMove [ 
-| player board game king blackRook1 blackRook2 whiteBishop  |
+MyPlayerTest >> testPieceCanBlockThreatAndMove [
 
-    board := MyChessBoard empty. 
-	 game := MyChessGame freshGame.
-	
- 	 board at: 'h1' put: (king := MyKing white).
-	 board at: 'h8' put: (blackRook1 := MyRook black).
-	 board at: 'a2' put: (blackRook2 := MyRook black).
-	 board at: 'd1' put: (whiteBishop := MyBishop white).
+	| blackRook1 blackRook2 whiteBishop |
+	board at: 'h8' put: (blackRook1 := MyRook black).
+	board at: 'a2' put: (blackRook2 := MyRook black).
+	board at: 'd1' put: (whiteBishop := MyBishop white).
 
+	self assert: king isInCheck.
 
-    player := MyPlayer new. 
-	 player white.
-    player game: game. 
-	 game board: board.
-	
-    self assert: king isInCheck.
+	player play.
 
-    player play. 
+	self assert: king isInCheck not.
 
-    self assert: (king isInCheck) not.
-
-	 self assert: (board locate: 'h1') equals: king. 
-	 self assert: (board locate: 'h5') equals: whiteBishop.
-	 self assert: (board locate: 'h8') equals: blackRook1.
-	 self assert: (board locate: 'a2') equals: blackRook2.
-
-
-
-
-
-
-
+	self assert: (board locate: 'h1') equals: king.
+	self assert: (board locate: 'h5') equals: whiteBishop.
+	self assert: (board locate: 'h8') equals: blackRook1.
+	self assert: (board locate: 'a2') equals: blackRook2
 ]
 
 { #category : 'tests' }
-MyPlayerTest >> testPieceCanCaptureThreat [ 
-| player board game king blackRook1 blackRook2 whiteBishop blackQueen|
+MyPlayerTest >> testPieceCanCaptureThreat [
 
-    board := MyChessBoard empty. 
-	 game := MyChessGame freshGame.
-	
- 	 board at: 'h1' put: (king := MyKing white).
-	 board at: 'h5' put: (blackRook1 := MyRook black).
-	 board at: 'a2' put: (blackRook2 := MyRook black).
-	 board at: 'd1' put: (whiteBishop := MyBishop white).
-	 board at: 'g8' put: (blackQueen := MyQueen black).
+	| blackRook1 blackRook2 whiteBishop blackQueen |
+	board at: 'h5' put: (blackRook1 := MyRook black).
+	board at: 'a2' put: (blackRook2 := MyRook black).
+	board at: 'd1' put: (whiteBishop := MyBishop white).
+	board at: 'g8' put: (blackQueen := MyQueen black).
 
-    player := MyPlayer new. 
-	 player white.
-    player game: game. 
-	 game board: board.
-	
-    self assert: king isInCheck.
+	self assert: king isInCheck.
 
-    player play. 
+	player play.
 
-    self assert: (king isInCheck) not.
+	self assert: king isInCheck not.
 
-	 self assert: (board locate: 'h1') equals: king. 
-	 self assert: (board locate: 'h5') equals: whiteBishop.
-	 self assert: (board locate: 'a2') equals: blackRook2.
-		 self assert: (board locate: 'g8') equals: blackQueen.
-
-
-
-
-
-
-
+	self assert: (board locate: 'h1') equals: king.
+	self assert: (board locate: 'h5') equals: whiteBishop.
+	self assert: (board locate: 'a2') equals: blackRook2.
+	self assert: (board locate: 'g8') equals: blackQueen
 ]
 
 { #category : 'tests' }
 MyPlayerTest >> testPieceCanCaptureThreatAndMove [
-| player board game king blackRook1 blackRook2 whiteBishop|
 
-    board := MyChessBoard empty. 
-	 game := MyChessGame freshGame.
-	
- 	 board at: 'h1' put: (king := MyKing white).
-	 board at: 'h5' put: (blackRook1 := MyRook black).
-	 board at: 'a2' put: (blackRook2 := MyRook black).
-	 board at: 'd1' put: (whiteBishop := MyBishop white).
+	| blackRook1 blackRook2 whiteBishop |
+	board at: 'h5' put: (blackRook1 := MyRook black).
+	board at: 'a2' put: (blackRook2 := MyRook black).
+	board at: 'd1' put: (whiteBishop := MyBishop white).
 
 
-    player := MyPlayer new. 
-	 player white.
-    player game: game. 
-	 game board: board.
-	
-    self assert: king isInCheck.
+	self assert: king isInCheck.
 
-    player play. 
+	player play.
 
-    self assert: (king isInCheck) not.
+	self assert: king isInCheck not.
 
-	 self assert: (board locate: 'h1') equals: king. 
-	 self assert: (board locate: 'h5') equals: whiteBishop.
-	 self assert: (board locate: 'a2') equals: blackRook2.
-
-
-
-
-
-
-
-
+	self assert: (board locate: 'h1') equals: king.
+	self assert: (board locate: 'h5') equals: whiteBishop.
+	self assert: (board locate: 'a2') equals: blackRook2
 ]
