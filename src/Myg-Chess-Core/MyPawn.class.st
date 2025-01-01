@@ -149,18 +149,18 @@ MyPawn >> targetSquareLegalTest: aBoolean [
 		ifFalse: [ op := [ :s | s down ] ].
 
 
-	basicMoveSquare := { (op value: square)  }.
+	basicMoveSquare := { (op value: square) }.
 
-	doubleMoveSquare := { ((op value: square) isNotNil and: [
+	doubleMoveSquare := { ((op value: square) notNil and: [
 		                     (op value: square) contents isNil ifTrue: [
 			                     self state accept:
 				                     (MyPieceTargetSquareVisitor new strategy:
-					                      'moveDouble') ] ]) }.
+					                      'moveDouble') ] ifFalse: [ nil ] ] ) }.
 
 
 
-	dbmove := (basicMoveSquare , doubleMoveSquare)  select: [ :s | s notNil and: [  
-		          s contents isNil ]].
+	dbmove := basicMoveSquare , doubleMoveSquare select: [ :s |
+		          s notNil and: [ s contents isNil ] ].
 
 
 	diagonalMoveSquare := (({ square left } , { square right } select: [
