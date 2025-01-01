@@ -144,7 +144,8 @@ MyChessGame >> lastPiece: piece [
 
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-
+Transcript show: 'état initial:';cr.
+Transcript show:piece state;cr.
 	piece id = 'P' ifTrue: [
 		piece isWhite
 			ifTrue: [
@@ -171,20 +172,12 @@ MyChessGame >> move: piece to: square [
 
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
-	
 	self changeLastPiece: piece.
+	
+	Transcript show: 'état nouveau';cr.
+	Transcript show:piece state;cr.
 
-]
 
-{ #category : 'as yet unclassified' }
-MyChessGame >> moveW: piece to: square [
-
-	(piece square left up = square and: [ square hasPiece not ])
-		ifTrue: [
-			piece moveEnPassant: true.
-			piece moveTo: square ]
-		ifFalse: [ piece moveTo: square ].
-	self recordMovementOf: piece to: square " down"
 ]
 
 { #category : 'accessing' }

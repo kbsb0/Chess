@@ -19,7 +19,7 @@ MyPawn >> id [
 
 { #category : 'initialization' }
 MyPawn >> initialize [
-
+	super initialize.
 	self movesForward2: false.
 	self moveEnPassantL: false.
 	self moveEnPassantR: false.
@@ -100,7 +100,27 @@ MyPawn >> moveTo: aSquare [
 
 	" on précise si le pion vient d'avancer de deux cases"
 	nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
-	self movesForward2: nbSquareMove = 2
+	self movesForward2: nbSquareMove = 2.
+	
+	nbSquareMove = 2 ifTrue:[
+		self state specialDoubleAdvanceMove.
+		]
+	ifFalse: [ self state classicalMove ].
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]
 
 { #category : 'accessing' }

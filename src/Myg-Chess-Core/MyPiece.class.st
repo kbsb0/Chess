@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'color',
-		'square'
+		'square',
+		'state'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -125,6 +126,11 @@ MyPiece >> id [
 	^ 'Q'
 ]
 
+{ #category : 'initialization' }
+MyPiece >> initialize [ 
+	self state: (MyPieceInitialState new piece:self)
+]
+
 { #category : 'testing' }
 MyPiece >> isKing [
 	
@@ -169,6 +175,7 @@ MyPiece >> moveTo: aSquare [
 	square emptyContents.
 	square := aSquare.
 	aSquare contents: self.
+	state classicalMove.
 
 ]
 
@@ -193,6 +200,16 @@ MyPiece >> square [
 MyPiece >> square: aMyChessSquare [ 
 	
 	square := aMyChessSquare
+]
+
+{ #category : 'accessing' }
+MyPiece >> state [ 
+	^ state.
+]
+
+{ #category : 'accessing' }
+MyPiece >> state: myPieceState [
+	state:= myPieceState.
 ]
 
 { #category : 'rendering' }
