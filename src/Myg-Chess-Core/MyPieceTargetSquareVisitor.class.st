@@ -6,23 +6,35 @@ Class {
 }
 
 { #category : 'visiting' }
-MyPieceTargetSquareVisitor >> visitPieceDoubleAdvanceState: op piece: piece [
+MyPieceTargetSquareVisitor >> visitPieceDoubleAdvanceState: piece [
 
-	op = 'classic' ifTrue: [ ^ piece square ].
-	op = 'enPassant' ifTrue: [
+
+	strategy = 'moveEnPassant' ifTrue: [
 		piece isWhite
-			ifTrue: [ ^ piece square up ]
-			ifFalse: [ ^ piece square down ] ].
-	^ nil.
+			ifTrue: [ ^ piece square down ]
+			ifFalse: [ ^ piece square up ] ].
+	^ nil
 ]
 
 { #category : 'visiting' }
-MyPieceTargetSquareVisitor >> visitPieceInitialState: op piece: piece [
-	^ piece square 
+MyPieceTargetSquareVisitor >> visitPieceInitialState: piece [
+
+	strategy = 'moveEnPassant' ifTrue: [ ^ nil ].
+	strategy = 'moveDouble' ifTrue: [
+		^ piece isWhite
+			  ifTrue: [ piece square up up]
+			  ifFalse: [ piece square down down ] ].
+	^ nil 
+	"strategy := 'moveEnPassant' ifTrue: [ ^ nil ].
+	strategy := 'basicMove' ifTrue: [ ^ nil ].
+	strategy := 'diagonalMove' ifTrue: [ ^ piece ].
+	^ nil"
 ]
 
 { #category : 'visiting' }
-MyPieceTargetSquareVisitor >> visitPieceMovingState: op piece: piece [
-
-		^ piece square
+MyPieceTargetSquareVisitor >> visitPieceMovingState: piece [
+	"self halt."
+	strategy = 'moveEnPassant' ifTrue: [ ^ nil ].
+	strategy = 'moveDouble' ifTrue: [ ^ nil ].
+	^ nil
 ]

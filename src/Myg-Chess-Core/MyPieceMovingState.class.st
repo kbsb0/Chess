@@ -5,6 +5,11 @@ Class {
 	#package : 'Myg-Chess-Core'
 }
 
+{ #category : 'visiting' }
+MyPieceMovingState >> accept: visitor [
+	^ visitor visitPieceMovingState:  piece.
+]
+
 { #category : 'as yet unclassified' }
 MyPieceMovingState >> classicalMove [
 	self

@@ -52,10 +52,12 @@ MyChessGame class >> new [
 
 { #category : 'as yet unclassified' }
 MyChessGame >> changeLastPiece: piece [
-	(self lastPiece notNil and: [self lastPiece id = 'P']) ifTrue: [
-		self lastPiece movesForward2: false.
-		].
-	self lastPiece: piece.
+
+	(self lastPiece notNil and: [ self lastPiece id = 'P' ]) ifTrue: [
+		self lastPiece movesForward2: false ].
+
+	self lastPiece ifNotNil: [ self lastPiece state classicalMove ].
+	self lastPiece: piece
 ]
 
 { #category : 'as yet unclassified' }
@@ -144,8 +146,7 @@ MyChessGame >> lastPiece: piece [
 
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-Transcript show: 'état initial:';cr.
-Transcript show:piece state;cr.
+
 	piece id = 'P' ifTrue: [
 		piece isWhite
 			ifTrue: [
@@ -173,10 +174,6 @@ Transcript show:piece state;cr.
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
 	self changeLastPiece: piece.
-	
-	Transcript show: 'état nouveau';cr.
-	Transcript show:piece state;cr.
-
 
 ]
 

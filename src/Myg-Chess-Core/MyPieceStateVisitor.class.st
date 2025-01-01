@@ -1,24 +1,38 @@
 Class {
 	#name : 'MyPieceStateVisitor',
 	#superclass : 'Object',
+	#instVars : [
+		'strategy'
+	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
 }
 
+{ #category : 'accessing' }
+MyPieceStateVisitor >> strategy [
+
+	^ strategy.
+]
+
+{ #category : 'accessing' }
+MyPieceStateVisitor >> strategy: s [
+	strategy := s.
+]
+
 { #category : 'visiting' }
-MyPieceStateVisitor >> visitPieceDoubleAdvanceState: op piece: piece [
+MyPieceStateVisitor >> visitPieceDoubleAdvanceState: piece [
 
 	self subclassResponsibility
 ]
 
 { #category : 'visiting' }
-MyPieceStateVisitor >> visitPieceInitialState: op piece: piece [
+MyPieceStateVisitor >> visitPieceInitialState: piece [
 
 	self subclassResponsibility
 ]
 
 { #category : 'visiting' }
-MyPieceStateVisitor >> visitPieceMovingState: op piece: piece [
+MyPieceStateVisitor >> visitPieceMovingState:  piece [
 
 	self subclassResponsibility
 ]

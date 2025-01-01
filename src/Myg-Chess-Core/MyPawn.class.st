@@ -141,9 +141,57 @@ MyPawn >> renderPieceOn: aSquare [
 ]
 
 { #category : 'as yet unclassified' }
+MyPawn >> targetSquareLegalTest: aBoolean [
+
+	| op basicMoveSquare doubleMoveSquare dbmove diagonalMoveSquare passantMoveSquare moves |
+	self isWhite
+		ifTrue: [ op := [ :s | s up ] ]
+		ifFalse: [ op := [ :s | s down ] ].
+
+
+	basicMoveSquare := { (op value: square)  }.
+
+	doubleMoveSquare := { ((op value: square) isNotNil and: [
+		                     (op value: square) contents isNil ifTrue: [
+			                     self state accept:
+				                     (MyPieceTargetSquareVisitor new strategy:
+					                      'moveDouble') ] ]) }.
+
+
+
+	dbmove := (basicMoveSquare , doubleMoveSquare)  select: [ :s | s notNil and: [  
+		          s contents isNil ]].
+
+
+	diagonalMoveSquare := (({ square left } , { square right } select: [
+		                        :s | s notNil ]) collect: [ :s |
+		                       op value: s ]) select: [ :s |
+		                      s notNil and: [
+			                      s contents notNil and: [
+				                      s contents color ~= color ] ] ].
+
+
+
+
+	passantMoveSquare := ({ square left } , { square right } select: [ :s |
+		                      s notNil and: [
+			                      s hasPiece and: [ s contents color ~= color ] ] ])
+		                     collect: [ :s |
+			                     s contents state accept:
+				                     (MyPieceTargetSquareVisitor new strategy:
+					                      'moveEnPassant') ].
+
+
+	moves := dbmove , diagonalMoveSquare , passantMoveSquare select: [ :s |
+		         s notNil ].
+
+	^ moves
+]
+
+{ #category : 'as yet unclassified' }
 MyPawn >> targetSquaresLegal: aBoolean [
 
-	| squares squaresWithOppoment enPassant |
+	| squares squaresWithOppoment enPassant res |
 	squares := (self isWhite
 		            ifTrue: [
 			            square file = $2
@@ -165,30 +213,18 @@ MyPawn >> targetSquaresLegal: aBoolean [
 				                       s hasPiece and: [
 					                       s contents color ~= color ] ] ].
 
-"
-	enPassantW := (self isWhite and: [ square file = $5 ])
-		              ifTrue: [
-			              ({ square left } , { square right } select: [ :s |
-				               s notNil and: [
-					               s hasPiece and: [
-						               s contents color ~= color and: [
-							               s contents movesForward2 ] ] ] ]) collect: [ :s |
-				              s up ] ]
-		              ifFalse: [ {  } ].
 
-	enPassantB := (self isWhite not and: [ square file = $4 ])
-		              ifTrue: [
-			              ({ square left } , { square right } select: [ :s |
-				               s notNil and: [
-					               s hasPiece and: [
-						               s contents color ~= color and: [
-							               s contents movesForward2 ] ] ] ]) collect: [ :s |
-				              s down ] ]
-		              ifFalse: [ {  } ]."
+	enPassant := self targetSquaresLegalEnPassant: aBoolean.
 
-enPassant := self targetSquaresLegalEnPassant: aBoolean.
 
-	^ squares , squaresWithOppoment , enPassant 
+	res := self targetSquareLegalTest: aBoolean.
+
+
+
+
+
+	^ res.
+	^ squares , squaresWithOppoment , enPassant
 ]
 
 { #category : 'as yet unclassified' }
