@@ -120,10 +120,10 @@ MyPawn >> renderPieceOn: aSquare [
 	^ aSquare renderPawn: self
 ]
 
-{ #category : 'rendering' }
+{ #category : 'as yet unclassified' }
 MyPawn >> targetSquaresLegal: aBoolean [
 
-	| squares squaresWithOppoment enPassantW enPassantB |
+	| squares squaresWithOppoment enPassant |
 	squares := (self isWhite
 		            ifTrue: [
 			            square file = $2
@@ -145,6 +145,39 @@ MyPawn >> targetSquaresLegal: aBoolean [
 				                       s hasPiece and: [
 					                       s contents color ~= color ] ] ].
 
+"
+	enPassantW := (self isWhite and: [ square file = $5 ])
+		              ifTrue: [
+			              ({ square left } , { square right } select: [ :s |
+				               s notNil and: [
+					               s hasPiece and: [
+						               s contents color ~= color and: [
+							               s contents movesForward2 ] ] ] ]) collect: [ :s |
+				              s up ] ]
+		              ifFalse: [ {  } ].
+
+	enPassantB := (self isWhite not and: [ square file = $4 ])
+		              ifTrue: [
+			              ({ square left } , { square right } select: [ :s |
+				               s notNil and: [
+					               s hasPiece and: [
+						               s contents color ~= color and: [
+							               s contents movesForward2 ] ] ] ]) collect: [ :s |
+				              s down ] ]
+		              ifFalse: [ {  } ]."
+
+enPassant := self targetSquaresLegalEnPassant: aBoolean.
+
+	^ squares , squaresWithOppoment , enPassant 
+]
+
+{ #category : 'as yet unclassified' }
+MyPawn >> targetSquaresLegalEnPassant: aBoolean [
+
+| enPassantW enPassantB |
+
+
+
 
 	enPassantW := (self isWhite and: [ square file = $5 ])
 		              ifTrue: [
@@ -165,8 +198,6 @@ MyPawn >> targetSquaresLegal: aBoolean [
 							               s contents movesForward2 ] ] ] ]) collect: [ :s |
 				              s down ] ]
 		              ifFalse: [ {  } ].
-
-
-
-	^ squares , squaresWithOppoment , enPassantW , enPassantB
+		
+	^ enPassantW , enPassantB
 ]

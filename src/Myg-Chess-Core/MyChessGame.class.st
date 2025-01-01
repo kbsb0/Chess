@@ -23,7 +23,8 @@ Class {
 		'movesLabel',
 		'moveCountLabel',
 		'moves',
-		'dsp'
+		'dsp',
+		'lastPiece'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -47,6 +48,14 @@ MyChessGame class >> fromFENString: aFENString [
 MyChessGame class >> new [
 	
 	self error: 'Please use one of the other constructors'
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> changeLastPiece: piece [
+	(self lastPiece notNil and: [self lastPiece id = 'P']) ifTrue: [
+		self lastPiece movesForward2: false.
+		].
+	self lastPiece: piece.
 ]
 
 { #category : 'as yet unclassified' }
@@ -123,6 +132,16 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		aLayoutConstraints vertical fitContent ]
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> lastPiece [
+	^ lastPiece.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> lastPiece: piece [
+	lastPiece:= piece.
+]
+
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
 
@@ -150,11 +169,11 @@ MyChessGame >> move: piece to: square [
 						piece moveEnPassantR: true ] ] ].
 
 
-
-
-
 	piece moveTo: square.
-	self recordMovementOf: piece to: square
+	self recordMovementOf: piece to: square.
+	
+	self changeLastPiece: piece.
+
 ]
 
 { #category : 'as yet unclassified' }
