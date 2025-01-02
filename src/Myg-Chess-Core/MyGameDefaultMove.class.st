@@ -9,7 +9,7 @@ Class {
 MyGameDefaultMove >> handleRequest: aPlayer [
 
 	| pieces piece legalMoves |
-	pieces := aPlayer pieces.
+	pieces := aPlayer pieces asOrderedCollection.
 	[ pieces notEmpty ] whileTrue: [
 		piece := pieces atRandom.
 		legalMoves := piece legalTargetSquares.
