@@ -8,7 +8,8 @@ Class {
 		'piece',
 		'contents',
 		'board',
-		'target'
+		'target',
+		'enPassantTarget'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -127,6 +128,16 @@ MyChessSquare >> emptyContents [
 ]
 
 { #category : 'accessing' }
+MyChessSquare >> enPassantTarget [
+	^ enPassantTarget
+]
+
+{ #category : 'accessing' }
+MyChessSquare >> enPassantTarget: aBoolean [
+	enPassantTarget := aBoolean.
+]
+
+{ #category : 'accessing' }
 MyChessSquare >> file [
 	
 	^ name second
@@ -156,6 +167,7 @@ MyChessSquare >> highlightTarget [
 MyChessSquare >> initialize [
 
 	super initialize.
+	self enPassantTarget: false.
 	target := BlElement new
 		  geometry: BlCircleGeometry new;
 		  background: (Color gray alpha: 0.3).

@@ -8,11 +8,10 @@ Class {
 { #category : 'visiting' }
 MyPieceTargetSquareVisitor >> visitPieceDoubleAdvanceState: piece [
 
-
 	strategy = 'moveEnPassant' ifTrue: [
 		piece isWhite
-			ifTrue: [ ^ piece square down ]
-			ifFalse: [ ^ piece square up ] ].
+			ifTrue: [ piece  square down enPassantTarget: true. ^ piece square down ]
+			ifFalse: [ piece  square up enPassantTarget: true. ^ piece square up ] ].
 	^ nil
 ]
 

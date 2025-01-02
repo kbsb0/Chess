@@ -64,6 +64,33 @@ MyPawn >> moveEnPassantR: bool [
 
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
+
+    | op nbSquareMove oldFile |
+    op := self isWhite
+              ifTrue: [ [ :s | s down ] ]
+              ifFalse: [ [ :s | s up ] ].
+
+    oldFile := square file.
+    (self legalTargetSquares includes: aSquare)
+        ifFalse: [ ^ self ]
+        ifTrue: [
+            square emptyContents.
+            square := aSquare.
+            aSquare contents: self.
+            aSquare enPassantTarget ifTrue: [
+                (op value: aSquare) emptyContents.
+                aSquare enPassantTarget: false ] ].
+
+
+    nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
+
+    nbSquareMove = 2
+        ifTrue: [ self state specialDoubleAdvanceMove ]
+        ifFalse: [ self state classicalMove ]
+]
+
+{ #category : 'as yet unclassified' }
+MyPawn >> moveToOld: aSquare [
 	"On compare l'anciene pos avec la nouvelle. Si la différence de file est de 2, 
 	cela veut dire que le pion peut être pris avec la prise en passant."
 
