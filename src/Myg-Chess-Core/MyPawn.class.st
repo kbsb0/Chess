@@ -20,28 +20,25 @@ MyPawn >> id [
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
 
-    | op nbSquareMove oldFile |
-    op := self isWhite
-              ifTrue: [ [ :s | s down ] ]
-              ifFalse: [ [ :s | s up ] ].
+	| nbSquareMove oldFile |
 
-    oldFile := square file.
-    (self legalTargetSquares includes: aSquare)
-        ifFalse: [ ^ self ]
-        ifTrue: [
-            square emptyContents.
-            square := aSquare.
-            aSquare contents: self.
-            aSquare enPassantTarget ifTrue: [
-                (op value: aSquare) emptyContents.
-                aSquare enPassantTarget: false ] ].
+	oldFile := square file.
+	(self legalTargetSquares includes: aSquare)
+		ifFalse: [ ^ self ]
+		ifTrue: [
+			square emptyContents.
+			square := aSquare.
+			aSquare contents: self.
+			aSquare enPassantTarget ifTrue: [
+				(oppositeMoveStrategy nextSquare: aSquare) emptyContents.
+				aSquare enPassantTarget: false ] ].
 
 
-    nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
+	nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
 
-    nbSquareMove = 2
-        ifTrue: [ self state specialDoubleAdvanceMove ]
-        ifFalse: [ self state classicalMove ]
+	nbSquareMove = 2
+		ifTrue: [ self state specialDoubleAdvanceMove ]
+		ifFalse: [ self state classicalMove ]
 ]
 
 { #category : 'rendering' }
@@ -53,14 +50,11 @@ MyPawn >> renderPieceOn: aSquare [
 { #category : 'as yet unclassified' }
 MyPawn >> targetSquaresLegal: aBoolean [
 
-	| op basicMoveSquare diagonalMoveSquare passantMoveSquare |
-	op := self isWhite
-		      ifTrue: [ [ :s | s up ] ]
-		      ifFalse: [ [ :s | s down ] ].
-
-	basicMoveSquare := { (op value: square) }
-	                   , { ((op value: square) notNil and: [
-			                    (op value: square) contents
+	| basicMoveSquare diagonalMoveSquare passantMoveSquare |
+	basicMoveSquare := { (moveStrategy nextSquare: square) }
+	                   ,
+		                   { ((moveStrategy nextSquare: square) notNil and: [
+			                    (moveStrategy nextSquare: square) contents
 				                    ifNil: [
 					                    self state accept:
 						                    (MyPieceTargetSquareVisitor new strategy:
@@ -71,7 +65,7 @@ MyPawn >> targetSquaresLegal: aBoolean [
 
 	diagonalMoveSquare := (({ square left } , { square right } select: [
 		                        :s | s notNil ]) collect: [ :s |
-		                       op value: s ]) select: [ :s |
+		                       moveStrategy nextSquare: s ]) select: [ :s |
 		                      s notNil and: [
 			                      s contents notNil and: [
 				                      s contents color ~= color ] ] ].

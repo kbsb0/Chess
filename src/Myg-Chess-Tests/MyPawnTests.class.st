@@ -21,22 +21,38 @@ MyPawnTests >> testId [
 ]
 
 { #category : 'tests' }
-MyPawnTests >> testMoveTo [ 
+MyPawnTests >> testMoveTo [
+
 	| pawn squares board |
 	board := MyChessBoard empty.
 	board at: 'c3' put: (pawn := MyPawn white).
-	
+
 	squares := pawn targetSquares.
-	
+
 	"mon pion est positioné en c3"
-	self assert: (pawn square) equals: (board at: 'c3').
-	
-	
-	
+	self assert: pawn square equals: (board at: 'c3').
+
 	"après déplacement, mon pion est positioné en c4"
-	 board at: 'c4' put: (pawn := MyPawn white).
-	self assert: (pawn square) equals: (board at: 'c4').
-	
+	board at: 'c4' put: (pawn := MyPawn white).
+	self assert: pawn square equals: (board at: 'c4')
+]
+
+{ #category : 'tests' }
+MyPawnTests >> testMoveToIllegalTargetSquare [
+
+	| pawn pawnOpponent board |
+	board := MyChessBoard empty.
+	board at: 'c5' put: (pawn := MyPawn white).
+	pawn state: (MyPieceMovingState new piece: pawn).
+	board at: 'b5' put: (pawnOpponent := MyPawn black).
+	pawnOpponent state: (MyPawnDoubleAdvanceState new piece: pawn).
+	pawnOpponent square enPassantTarget: true.
+
+	self
+		assert: (pawn legalTargetSquares includes: (board at: 'b3'))
+		equals: true.
+
+
 ]
 
 { #category : 'tests' }
