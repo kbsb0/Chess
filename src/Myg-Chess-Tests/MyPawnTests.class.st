@@ -45,16 +45,14 @@ MyPawnTests >> testMoves [
 	| pawn squares board |
 	board := MyChessBoard empty.
 	board at: 'c3' put: (pawn := MyPawn white).
+	pawn state: (MyPieceMovingState new piece: pawn).
 
 	squares := pawn targetSquares.
 	self
 		assertCollection: squares
-		includesAll:
-			(#( c4 ) collect: [ :name |
-				 board at: name ]).
-			
-	self 
-		assert: squares size equals: 1.
+		includesAll: (#( c4 ) collect: [ :name | board at: name ]).
+
+	self assert: squares size equals: 1
 ]
 
 { #category : 'tests' }
@@ -179,26 +177,4 @@ MyPawnTests >> testMovesWithWhitePawnWhenStart [
 	
 	squares := pawn targetSquares.
 	self assertCollection: squares includesAll: (#( e3 e4 ) collect: [ :name | board at: name ]).
-]
-
-{ #category : 'tests' }
-MyPawnTests >> testMovesWithWhitePriseEnPassantR [
-
-	| pawnW pawnB board squares |
-	board := MyChessBoard empty.
-
-	board at: 'e5' put: (pawnW := MyPawn white).
-	board at: 'f7' put: (pawnB := MyPawn black).
-
-	pawnB moveTo: (board at: 'f5').
-
-	self assert: pawnB movesForward2.
-	
-	
-	self assert: ((board at: 'f7') contents) = pawnB.
-	pawnW moveEnPassantR: true.
-	pawnW moveTo: (board at: 'f6')
-	
-
-	
 ]

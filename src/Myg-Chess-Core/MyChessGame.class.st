@@ -53,8 +53,7 @@ MyChessGame class >> new [
 { #category : 'as yet unclassified' }
 MyChessGame >> changeLastPiece: piece [
 
-	(self lastPiece notNil and: [ self lastPiece id = 'P' ]) ifTrue: [
-		self lastPiece movesForward2: false ].
+
 
 	self lastPiece ifNotNil: [ self lastPiece state classicalMove ].
 	self lastPiece: piece
@@ -146,35 +145,9 @@ MyChessGame >> lastPiece: piece [
 
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-
-	piece id = 'P' ifTrue: [
-		piece isWhite
-			ifTrue: [
-				(piece square left notNil and: [
-					 piece square left up = square and: [ square hasPiece not ] ])
-					ifTrue: [ piece moveEnPassantL: true ]. "pion blanc qui se déplace en haut à gauche ou en haut à droite"
-
-
-				(piece square right notNil and: [
-					 piece square right up = square and: [ square hasPiece not ] ])
-					ifTrue: [ "pion blanc qui se déplace en haut à gauche ou en haut à droite"
-						piece moveEnPassantR: true ] ]
-			ifFalse: [
-				(piece square left notNil and: [
-					 piece square left down = square and: [ square hasPiece not ] ])
-					ifTrue: [ piece moveEnPassantL: true ]. "pion noir qui se déplace en haut à gauche ou en haut à droite"
-
-
-				(piece square right notNil and: [
-					 piece square right down = square and: [ square hasPiece not ] ])
-					ifTrue: [ "pion noir qui se déplace en haut à gauche ou en haut à droite"
-						piece moveEnPassantR: true ] ] ].
-
-
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
-	self changeLastPiece: piece.
-
+	self changeLastPiece: piece
 ]
 
 { #category : 'accessing' }

@@ -17,51 +17,6 @@ MyPawn >> id [
 	^ 'P'
 ]
 
-{ #category : 'initialization' }
-MyPawn >> initialize [
-	super initialize.
-	self movesForward2: false.
-	self moveEnPassantL: false.
-	self moveEnPassantR: false.
-]
-
-{ #category : 'accessing' }
-MyPawn >> moveEnPassant [
-	^ moveEnPassant.
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> moveEnPassant: bool [
-	"true : la piece peut se déplacer avec la prise en passant"
-	moveEnPassant := bool.
-]
-
-{ #category : 'accessing' }
-MyPawn >> moveEnPassantL [
-
-	^ moveEnPassantL
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> moveEnPassantL: bool [
-	"true : la piece peut se déplacer avec la prise en passant à gauche"
-
-	moveEnPassantL := bool
-]
-
-{ #category : 'accessing' }
-MyPawn >> moveEnPassantR [
-
-	^ moveEnPassantR
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> moveEnPassantR: bool [
-	"true : la piece peut se déplacer avec la prise en passant à gauche"
-
-	moveEnPassantR := bool
-]
-
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
 
@@ -89,78 +44,6 @@ MyPawn >> moveTo: aSquare [
         ifFalse: [ self state classicalMove ]
 ]
 
-{ #category : 'as yet unclassified' }
-MyPawn >> moveToOld: aSquare [
-	"On compare l'anciene pos avec la nouvelle. Si la différence de file est de 2, 
-	cela veut dire que le pion peut être pris avec la prise en passant."
-
-	| oldFile nbSquareMove |
-	oldFile := square file.
-
-
-	"PRISE EN PASSANT A GAUCHE"
-	self moveEnPassantL ifTrue: [
-		(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-		square emptyContents.
-		square left emptyContents.
-		square := aSquare.
-		aSquare contents: self.
-		self moveEnPassantL: false.
-		^ self ].
-
-
-	"PRISE EN PASSANT A DROITE"
-	self moveEnPassantR ifTrue: [
-		(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-		square emptyContents.
-		square right emptyContents.
-		square := aSquare.
-		aSquare contents: self.
-		self moveEnPassantR: false.
-		^ self ].
-
-
-	(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
-	square emptyContents.
-	square := aSquare.
-	aSquare contents: self.
-
-	" on précise si le pion vient d'avancer de deux cases"
-	nbSquareMove := (square file asciiValue - oldFile asciiValue) abs.
-	self movesForward2: nbSquareMove = 2.
-	
-	nbSquareMove = 2 ifTrue:[
-		self state specialDoubleAdvanceMove.
-		]
-	ifFalse: [ self state classicalMove ].
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-]
-
-{ #category : 'accessing' }
-MyPawn >> movesForward2 [
-	^ movesForward2.
-]
-
-{ #category : 'accessing' }
-MyPawn >> movesForward2: bool [
-	movesForward2 := bool.
-	
-]
-
 { #category : 'rendering' }
 MyPawn >> renderPieceOn: aSquare [ 
 	
@@ -168,26 +51,22 @@ MyPawn >> renderPieceOn: aSquare [
 ]
 
 { #category : 'as yet unclassified' }
-MyPawn >> targetSquareLegalTest: aBoolean [
+MyPawn >> targetSquaresLegal: aBoolean [
 
-	| op basicMoveSquare doubleMoveSquare dbmove diagonalMoveSquare passantMoveSquare moves |
-	self isWhite
-		ifTrue: [ op := [ :s | s up ] ]
-		ifFalse: [ op := [ :s | s down ] ].
+	| op basicMoveSquare diagonalMoveSquare passantMoveSquare |
+	op := self isWhite
+		      ifTrue: [ [ :s | s up ] ]
+		      ifFalse: [ [ :s | s down ] ].
 
-
-	basicMoveSquare := { (op value: square) }.
-
-	doubleMoveSquare := { ((op value: square) notNil and: [
-		                     (op value: square) contents isNil ifTrue: [
-			                     self state accept:
-				                     (MyPieceTargetSquareVisitor new strategy:
-					                      'moveDouble') ] ifFalse: [ nil ] ] ) }.
-
-
-
-	dbmove := basicMoveSquare , doubleMoveSquare select: [ :s |
-		          s notNil and: [ s contents isNil ] ].
+	basicMoveSquare := { (op value: square) }
+	                   , { ((op value: square) notNil and: [
+			                    (op value: square) contents
+				                    ifNil: [
+					                    self state accept:
+						                    (MyPieceTargetSquareVisitor new strategy:
+							                     'moveDouble') ]
+				                    ifNotNil: [ nil ] ]) } select: [ :s |
+		                   s notNil and: [ s contents isNil ] ].
 
 
 	diagonalMoveSquare := (({ square left } , { square right } select: [
@@ -198,8 +77,6 @@ MyPawn >> targetSquareLegalTest: aBoolean [
 				                      s contents color ~= color ] ] ].
 
 
-
-
 	passantMoveSquare := ({ square left } , { square right } select: [ :s |
 		                      s notNil and: [
 			                      s hasPiece and: [ s contents color ~= color ] ] ])
@@ -208,79 +85,6 @@ MyPawn >> targetSquareLegalTest: aBoolean [
 				                     (MyPieceTargetSquareVisitor new strategy:
 					                      'moveEnPassant') ].
 
-
-	moves := dbmove , diagonalMoveSquare , passantMoveSquare select: [ :s |
-		         s notNil ].
-
-	^ moves
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> targetSquaresLegal: aBoolean [
-
-	| squares squaresWithOppoment enPassant res |
-	squares := (self isWhite
-		            ifTrue: [
-			            square file = $2
-				            ifTrue: [ { square up } , { square up up } ]
-				            ifFalse: [ { square up } ] ]
-		            ifFalse: [
-			            square file = $7
-				            ifTrue: [ { square down } , { square down down } ]
-				            ifFalse: [ { square down } ] ]) select: [ :s |
-		           s notNil and: [ s hasPiece not ] ].
-
-	squaresWithOppoment := (self isWhite
-		                        ifTrue: [
-		                        { square upLeft } , { square upRight } ]
-		                        ifFalse: [
-		                        { square downLeft } , { square downRight } ])
-		                       select: [ :s |
-			                       s notNil and: [
-				                       s hasPiece and: [
-					                       s contents color ~= color ] ] ].
-
-
-	enPassant := self targetSquaresLegalEnPassant: aBoolean.
-
-
-	res := self targetSquareLegalTest: aBoolean.
-
-
-
-
-
-	^ res.
-	^ squares , squaresWithOppoment , enPassant
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> targetSquaresLegalEnPassant: aBoolean [
-
-| enPassantW enPassantB |
-
-
-
-
-	enPassantW := (self isWhite and: [ square file = $5 ])
-		              ifTrue: [
-			              ({ square left } , { square right } select: [ :s |
-				               s notNil and: [
-					               s hasPiece and: [
-						               s contents color ~= color and: [
-							               s contents movesForward2 ] ] ] ]) collect: [ :s |
-				              s up ] ]
-		              ifFalse: [ {  } ].
-
-	enPassantB := (self isWhite not and: [ square file = $4 ])
-		              ifTrue: [
-			              ({ square left } , { square right } select: [ :s |
-				               s notNil and: [
-					               s hasPiece and: [
-						               s contents color ~= color and: [
-							               s contents movesForward2 ] ] ] ]) collect: [ :s |
-				              s down ] ]
-		              ifFalse: [ {  } ].
-		
-	^ enPassantW , enPassantB
+	^ basicMoveSquare , diagonalMoveSquare , passantMoveSquare select: [
+		  :s | s notNil ]
 ]
