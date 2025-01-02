@@ -15,7 +15,7 @@ MyGameDefaultMove >> handleRequest: aPlayer [
 		legalMoves := piece legalTargetSquares.
 		legalMoves ifNotEmpty: [
 			aPlayer game move: piece to: legalMoves atRandom.
-			^ true ]
-		"pieces remove: piece." ].
+			^ true ].
+		pieces remove: piece. ].
 	^ false
 ]
