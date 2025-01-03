@@ -23,8 +23,7 @@ Class {
 		'movesLabel',
 		'moveCountLabel',
 		'moves',
-		'dsp',
-		'playerColorState'
+		'dsp'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -48,11 +47,6 @@ MyChessGame class >> fromFENString: aFENString [
 MyChessGame class >> new [
 	
 	self error: 'Please use one of the other constructors'
-]
-
-{ #category : 'as yet unclassified' }
-MyChessGame class >> protectKing [
-	self shouldBeImplemented.
 ]
 
 { #category : 'accessing' }
@@ -204,27 +198,6 @@ MyChessGame >> playerColorState [
 { #category : 'accessing' }
 MyChessGame >> playerColorState: aPlayerColorState [
 	playerColorState := aPlayerColorState.
-]
-
-{ #category : 'as yet unclassified' }
-MyChessGame >> protectKing: aColor [
-
-	| roi roiList pieces deplacements threatenedSquares|
-	"self halt."
-	roiList := (self board pieces) select: [ :p | p isKing and: p color = aColor ].
-	roi:= roiList first.
-	roi isInCheck ifFalse: [ ^ self ].
-	threatenedSquares := roi opponentPieces flatCollect: [ :e |
-		                     e attackingSquares ].
-	deplacements := roi legalTargetSquares isEmpty and: [
-		  threatenedSquares includes: roi square ].
-	deplacements ifNil: [
-		pieces := self pieces select: [ :p | p color = aColor ]
-		 ].
-	
-	
-
-	
 ]
 
 { #category : 'moves' }
