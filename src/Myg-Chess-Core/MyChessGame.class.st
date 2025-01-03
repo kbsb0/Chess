@@ -23,7 +23,8 @@ Class {
 		'movesLabel',
 		'moveCountLabel',
 		'moves',
-		'dsp'
+		'dsp',
+		'playerColorState'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -55,6 +56,17 @@ MyChessGame class >> protectKing [
 ]
 
 { #category : 'accessing' }
+MyChessGame >> blackPlayer [
+
+	^ blackPlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> blackPlayer: aBP [
+	blackPlayer := aBP.
+]
+
+{ #category : 'accessing' }
 MyChessGame >> board [
 	^ board.
 ]
@@ -71,6 +83,18 @@ MyChessGame >> checkForMate [
 	blackPlayer king isCheckMated ifTrue: [ self halt: 'White wins!' ].
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> currentPlayer [
+
+	^ currentPlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> currentPlayer: aPlayer [
+
+	currentPlayer := aPlayer.
+]
+
 { #category : 'initialization' }
 MyChessGame >> initialize [
 
@@ -79,7 +103,8 @@ MyChessGame >> initialize [
 
 	moves := OrderedCollection new.
 	whitePlayer := MyPlayer new white game: self.
-	blackPlayer := MyPlayer new black game: self
+	blackPlayer := MyPlayer new black game: self.
+	playerColorState := MyPlayerColorWhiteState new game: self.
 ]
 
 { #category : 'initialization' }
@@ -141,8 +166,20 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
 
-	piece moveTo: square.
-	self recordMovementOf: piece to: square
+	(currentPlayer color = piece color and: [piece square ~= square]) ifTrue: [
+		piece moveTo: square.
+		self recordMovementOf: piece to: square.
+		self playerColorState nextStatePlayer ]
+]
+
+{ #category : 'accessing' }
+MyChessGame >> moveCount [ 
+	^ moveCount.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> moveCount: aMoveCount [ 
+	moveCount := aMoveCount.
 ]
 
 { #category : 'accessing' }
@@ -155,12 +192,18 @@ MyChessGame >> pieces [
 MyChessGame >> play [
 
 	currentPlayer play.
-	currentPlayer = whitePlayer
-		ifTrue: [ currentPlayer := blackPlayer ]
-		ifFalse: [ 
-			moveCount := moveCount + 1.
-			currentPlayer := whitePlayer ].
 	self checkForMate
+]
+
+{ #category : 'accessing' }
+MyChessGame >> playerColorState [
+
+	^ playerColorState.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> playerColorState: aPlayerColorState [
+	playerColorState := aPlayerColorState.
 ]
 
 { #category : 'as yet unclassified' }
@@ -209,4 +252,15 @@ MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	].
 	
 	movesLabel text: movesText
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer [
+
+	^ whitePlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer: aWhitePlayer [
+	whitePlayer := aWhitePlayer.
 ]
