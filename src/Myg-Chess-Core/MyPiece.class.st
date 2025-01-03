@@ -3,7 +3,11 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'color',
-		'square'
+		'square',
+		'state',
+		'opMove',
+		'moveStrategy',
+		'oppositeMoveStrategy'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -14,6 +18,8 @@ MyPiece class >> black [
 
 	^ self new
 		  color: Color black;
+		  moveStrategy: MyPieceMoveStrategyDown new;
+		  oppositeMoveStrategy: MyPieceMoveStrategyUp new;
 		  yourself
 ]
 
@@ -22,6 +28,8 @@ MyPiece class >> white [
 
 	^ self new
 		  color: Color white;
+		  moveStrategy: MyPieceMoveStrategyUp new;
+		  oppositeMoveStrategy: MyPieceMoveStrategyDown new;
 		  yourself
 ]
 
@@ -125,6 +133,11 @@ MyPiece >> id [
 	^ 'Q'
 ]
 
+{ #category : 'initialization' }
+MyPiece >> initialize [ 
+	self state: (MyPieceInitialState new piece:self)
+]
+
 { #category : 'testing' }
 MyPiece >> isKing [
 	
@@ -161,6 +174,17 @@ MyPiece >> legalTargetSquares [
 	^ self targetSquaresLegal: true
 ]
 
+{ #category : 'accessing' }
+MyPiece >> moveStrategy [
+	^ moveStrategy.
+]
+
+{ #category : 'as yet unclassified' }
+MyPiece >> moveStrategy: aMoveStrategy [
+
+	moveStrategy:= aMoveStrategy
+]
+
 { #category : 'path commands' }
 MyPiece >> moveTo: aSquare [
 
@@ -168,7 +192,21 @@ MyPiece >> moveTo: aSquare [
 
 	square emptyContents.
 	square := aSquare.
-	aSquare contents: self
+	aSquare contents: self.
+	state classicalMove.
+
+]
+
+{ #category : 'accessing' }
+MyPiece >> oppositeMoveStrategy [
+
+	^ oppositeMoveStrategy
+]
+
+{ #category : 'accessing' }
+MyPiece >> oppositeMoveStrategy: anOppositeMoveStrategy [
+
+	oppositeMoveStrategy:= anOppositeMoveStrategy.
 ]
 
 { #category : 'rendering' }
@@ -192,6 +230,16 @@ MyPiece >> square [
 MyPiece >> square: aMyChessSquare [ 
 	
 	square := aMyChessSquare
+]
+
+{ #category : 'accessing' }
+MyPiece >> state [ 
+	^ state.
+]
+
+{ #category : 'accessing' }
+MyPiece >> state: myPieceState [
+	state:= myPieceState.
 ]
 
 { #category : 'rendering' }

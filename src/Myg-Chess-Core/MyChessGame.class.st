@@ -23,7 +23,8 @@ Class {
 		'movesLabel',
 		'moveCountLabel',
 		'moves',
-		'dsp'
+		'dsp',
+		'lastPiece'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -49,7 +50,16 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
-{ #category : 'playing' }
+{ #category : 'as yet unclassified' }
+MyChessGame >> changeLastPiece: piece [
+
+
+
+	self lastPiece ifNotNil: [ self lastPiece state classicalMove ].
+	self lastPiece: piece
+]
+
+{ #category : 'as yet unclassified' }
 MyChessGame >> checkForMate [
 
 	whitePlayer king isCheckMated ifTrue: [ self halt: 'Black wins!' ].
@@ -123,11 +133,21 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		aLayoutConstraints vertical fitContent ]
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> lastPiece [
+	^ lastPiece.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> lastPiece: piece [
+	lastPiece:= piece.
+]
+
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-
 	piece moveTo: square.
-	self recordMovementOf: piece to: square
+	self recordMovementOf: piece to: square.
+	self changeLastPiece: piece
 ]
 
 { #category : 'accessing' }

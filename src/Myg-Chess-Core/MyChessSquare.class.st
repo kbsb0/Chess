@@ -8,7 +8,8 @@ Class {
 		'piece',
 		'contents',
 		'board',
-		'target'
+		'target',
+		'enPassantTarget'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -109,10 +110,31 @@ MyChessSquare >> down [
 	^ self + (0 @ -1)
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessSquare >> downLeft [
+	^ self + (-1 @ -1)
+]
+
+{ #category : 'as yet unclassified' }
+MyChessSquare >> downRight [
+	
+	^ self + (1 @ -1)
+]
+
 { #category : 'asd' }
 MyChessSquare >> emptyContents [
 	
 	self contents: nil
+]
+
+{ #category : 'accessing' }
+MyChessSquare >> enPassantTarget [
+	^ enPassantTarget
+]
+
+{ #category : 'accessing' }
+MyChessSquare >> enPassantTarget: aBoolean [
+	enPassantTarget := aBoolean.
 ]
 
 { #category : 'accessing' }
@@ -145,6 +167,7 @@ MyChessSquare >> highlightTarget [
 MyChessSquare >> initialize [
 
 	super initialize.
+	self enPassantTarget: false.
 	target := BlElement new
 		  geometry: BlCircleGeometry new;
 		  background: (Color gray alpha: 0.3).
@@ -309,4 +332,15 @@ MyChessSquare >> unselect [
 MyChessSquare >> up [
 	
 	^ self + (0@1)
+]
+
+{ #category : 'as yet unclassified' }
+MyChessSquare >> upLeft [
+	^ self + (-1 @ 1)
+]
+
+{ #category : 'as yet unclassified' }
+MyChessSquare >> upRight [
+	
+	^ self + (1@1)
 ]
