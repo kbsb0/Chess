@@ -24,7 +24,8 @@ Class {
 		'moveCountLabel',
 		'moves',
 		'dsp',
-		'lastPiece'
+		'lastPiece',
+		'playerColorState'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -210,7 +211,7 @@ MyChessGame >> play [
 { #category : 'accessing' }
 MyChessGame >> playerColorState [
 
-	^ playerColorState
+	^ playerColorState.
 ]
 
 { #category : 'accessing' }
