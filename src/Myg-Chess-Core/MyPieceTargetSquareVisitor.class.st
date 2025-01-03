@@ -18,22 +18,14 @@ MyPieceTargetSquareVisitor >> visitPieceDoubleAdvanceState: piece [
 { #category : 'visiting' }
 MyPieceTargetSquareVisitor >> visitPieceInitialState: piece [
 
-	strategy = 'moveEnPassant' ifTrue: [ ^ nil ].
 	strategy = 'moveDouble' ifTrue: [
 		^ piece isWhite
-			  ifTrue: [ piece square up up]
+			  ifTrue: [ piece square up up ]
 			  ifFalse: [ piece square down down ] ].
-	^ nil 
-	"strategy := 'moveEnPassant' ifTrue: [ ^ nil ].
-	strategy := 'basicMove' ifTrue: [ ^ nil ].
-	strategy := 'diagonalMove' ifTrue: [ ^ piece ].
-	^ nil"
+	^ nil
 ]
 
 { #category : 'visiting' }
 MyPieceTargetSquareVisitor >> visitPieceMovingState: piece [
-	"self halt."
-	strategy = 'moveEnPassant' ifTrue: [ ^ nil ].
-	strategy = 'moveDouble' ifTrue: [ ^ nil ].
 	^ nil
 ]

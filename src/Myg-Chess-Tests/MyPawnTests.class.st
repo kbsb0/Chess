@@ -40,19 +40,20 @@ MyPawnTests >> testMoveTo [
 { #category : 'tests' }
 MyPawnTests >> testMoveToIllegalTargetSquare [
 
-	| pawn pawnOpponent board |
+	| pawn board |
 	board := MyChessBoard empty.
 	board at: 'c5' put: (pawn := MyPawn white).
 	pawn state: (MyPieceMovingState new piece: pawn).
-	board at: 'b5' put: (pawnOpponent := MyPawn black).
-	pawnOpponent state: (MyPawnDoubleAdvanceState new piece: pawn).
-	pawnOpponent square enPassantTarget: true.
+
 
 	self
 		assert: (pawn legalTargetSquares includes: (board at: 'b3'))
-		equals: true.
-
-
+		equals: false.
+		
+	pawn moveTo: ( board at: ('b3')).
+	self
+		assert: (pawn square )
+		equals: (board at: 'c5').
 ]
 
 { #category : 'tests' }
@@ -123,19 +124,26 @@ MyPawnTests >> testMovesWithBlackPawnWhenStart [
 ]
 
 { #category : 'tests' }
-MyPawnTests >> testMovesWithNoOpponents [ 
-""" on vérifie que les pions noirs et blancs ne sont autorisés que à bouger d'une case vers l'avant"""
-		| pawnW  pawnB squaresB squaresW board |
+MyPawnTests >> testMovesWithNoOpponents [
+	""" on vérifie que les pions noirs et blancs ne sont autorisés que à bouger d'une case vers l'avant"""
+
+	| pawnW pawnB squaresB squaresW board |
 	board := MyChessBoard empty.
 	board at: 'e4' put: (pawnW := MyPawn white).
 	board at: 'a3' put: (pawnB := MyPawn black).
-	
+
 
 	squaresW := pawnW targetSquares.
 	squaresB := pawnB targetSquares.
 	
-	self assertCollection: squaresW includesAll: (#( e5 ) collect: [ :name | board at: name ]).
-	self assertCollection: squaresB includesAll: (#( a2 ) collect: [ :name | board at: name ])
+	Transcript show: pawnW upLeftDiagonal; cr.
+
+	self
+		assertCollection: squaresW
+		includesAll: (#( e5 ) collect: [ :name | board at: name ]).
+	self
+		assertCollection: squaresB
+		includesAll: (#( a2 ) collect: [ :name | board at: name ])
 ]
 
 { #category : 'tests' }
@@ -178,10 +186,15 @@ MyPawnTests >> testMovesWithWhitePawnWhenCanPriseEnPassant [
 
 
 	"On vérifie que le pion blanc peut manger le noir ( prise en passant )"
-	squaresW := pawnW targetSquares.
 	self
-		assertCollection: squaresW
-		includesAll: (#( e6 f6 ) collect: [ :name | board at: name ])
+		assertCollection: pawnW legalTargetSquares
+		includesAll: (#( e6 f6 ) collect: [ :name | board at: name ]).
+	
+	pawnW moveTo: (board at: 'f6').
+	self assert: pawnW square equals: ( board at: 'f6').
+	self assert: (board at: 'f7') contents equals: nil.
+
+
 ]
 
 { #category : 'tests' }
