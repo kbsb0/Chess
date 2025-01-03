@@ -46,6 +46,8 @@ MyPlayerTest >> testKingCanMoveOutOfCheck [
 MyPlayerTest >> testKingMovesWhenNotInCheck [
 
 	| whitePawn |
+	
+	board at: 'h2' put: (whitePawn := MyPawn white).
 	self assert: king isInCheck not.
 
 	player play.
