@@ -180,9 +180,12 @@ MyChessGame >> lastPiece: piece [
 
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
+
+	(currentPlayer color = piece color and: [ piece square ~= square ])
+		ifFalse: [ ^ self ].
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
-	self changeLastPiece: piece
+	self playerColorState nextStatePlayer
 ]
 
 { #category : 'accessing' }
