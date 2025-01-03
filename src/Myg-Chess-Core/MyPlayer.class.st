@@ -60,22 +60,23 @@ MyPlayer >> pieces [
 { #category : 'playing' }
 MyPlayer >> play [
 
-	| pieces |
-	pieces := self king isInCheck
-		          ifTrue: [ OrderedCollection with: self king ]
-		          ifFalse: [ self pieces copy asOrderedCollection ].
+	| handlers |
+	handlers := OrderedCollection new.
+	handlers add: MyGameCapture new.
+	handlers add: MyGameBlock new.
+	handlers add: MyKingMove new.
+	handlers add: MyGameDefaultMove new.
 
 
-	[ pieces notEmpty ] whileTrue: [
-		| piece legalMoves |
-		piece := pieces atRandom.
-		pieces remove: piece.
-		legalMoves := piece legalTargetSquares.
-		legalMoves ifNotEmpty: [
-			game move: piece to: legalMoves atRandom.
-			^ self ] ].
+	handlers
+		detect: [ :handler | handler handleRequest: self ]
+		ifNone: [ self halt: 'NO MOVES AVAILABLE!' ]
+]
 
-	self halt: 'NO MOVES AVAILABLE!'
+{ #category : 'as yet unclassified' }
+MyPlayer >> threateningPieces: aKing [
+
+	^ aKing threateningPieces
 ]
 
 { #category : 'constants' }

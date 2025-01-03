@@ -50,6 +50,27 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> blackPlayer [
+
+	^ blackPlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> blackPlayer: aBP [
+	blackPlayer := aBP.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> board [
+	^ board.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> board: anObject [
+	board := anObject .
+]
+
 { #category : 'as yet unclassified' }
 MyChessGame >> changeLastPiece: piece [
 
@@ -66,6 +87,18 @@ MyChessGame >> checkForMate [
 	blackPlayer king isCheckMated ifTrue: [ self halt: 'White wins!' ].
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> currentPlayer [
+
+	^ currentPlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> currentPlayer: aPlayer [
+
+	currentPlayer := aPlayer.
+]
+
 { #category : 'initialization' }
 MyChessGame >> initialize [
 
@@ -74,7 +107,8 @@ MyChessGame >> initialize [
 
 	moves := OrderedCollection new.
 	whitePlayer := MyPlayer new white game: self.
-	blackPlayer := MyPlayer new black game: self
+	blackPlayer := MyPlayer new black game: self.
+	playerColorState := MyPlayerColorWhiteState new game: self.
 ]
 
 { #category : 'initialization' }
@@ -151,6 +185,16 @@ MyChessGame >> move: piece to: square [
 ]
 
 { #category : 'accessing' }
+MyChessGame >> moveCount [ 
+	^ moveCount.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> moveCount: aMoveCount [ 
+	moveCount := aMoveCount.
+]
+
+{ #category : 'accessing' }
 MyChessGame >> pieces [
 
 	^ board pieces
@@ -160,12 +204,18 @@ MyChessGame >> pieces [
 MyChessGame >> play [
 
 	currentPlayer play.
-	currentPlayer = whitePlayer
-		ifTrue: [ currentPlayer := blackPlayer ]
-		ifFalse: [ 
-			moveCount := moveCount + 1.
-			currentPlayer := whitePlayer ].
 	self checkForMate
+]
+
+{ #category : 'accessing' }
+MyChessGame >> playerColorState [
+
+	^ playerColorState
+]
+
+{ #category : 'accessing' }
+MyChessGame >> playerColorState: aPlayerColorState [
+	playerColorState := aPlayerColorState.
 ]
 
 { #category : 'moves' }
@@ -193,4 +243,15 @@ MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	].
 	
 	movesLabel text: movesText
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer [
+
+	^ whitePlayer.
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer: aWhitePlayer [
+	whitePlayer := aWhitePlayer.
 ]
