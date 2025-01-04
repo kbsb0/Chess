@@ -87,6 +87,11 @@ MyPiece >> color: aColor [
 	color := aColor
 ]
 
+{ #category : 'accessing' }
+MyPiece >> description [ 
+	^ 'piece'.
+]
+
 { #category : 'rendering' }
 MyPiece >> downFile [
 

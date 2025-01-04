@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : 'accessing' }
+MyPawn >> description [
+
+	^ 'pawn'
+]
+
+{ #category : 'accessing' }
 MyPawn >> id [
 
 	^ 'P'
@@ -38,7 +44,19 @@ MyPawn >> moveTo: aSquare [
 
 	nbSquareMove = 2
 		ifTrue: [ self state specialDoubleAdvanceMove ]
-		ifFalse: [ self state classicalMove ]
+		ifFalse: [ self state classicalMove ].
+		
+	self promotion.
+]
+
+{ #category : 'as yet unclassified' }
+MyPawn >> promotion [
+
+	| promotionObj |
+	promotionObj := MyChessPromotion new.
+	promotionObj piece: self.
+
+	promotionObj show.
 ]
 
 { #category : 'rendering' }
@@ -51,17 +69,15 @@ MyPawn >> renderPieceOn: aSquare [
 MyPawn >> targetSquaresLegal: aBoolean [
 
 	| basicMoveSquare diagonalMoveSquare passantMoveSquare |
+	
 	basicMoveSquare := { (moveStrategy nextSquare: square) }
-	                   ,
-		                   { ((moveStrategy nextSquare: square) notNil and: [
-			                    (moveStrategy nextSquare: square) contents
-				                    ifNil: [
-					                    self state accept:
-						                    (MyPieceTargetSquareVisitor new strategy:
-							                     'moveDouble') ]
-				                    ifNotNil: [ nil ] ]) } select: [ :s |
+	                   , ((moveStrategy nextSquare: square) notNil
+			                    ifTrue: [
+				                    { (self state accept:
+					                     (MyPieceTargetSquareVisitor new strategy:
+						                      'moveDouble')) } ]
+			                    ifFalse: [ {  } ]) select: [ :s |
 		                   s notNil and: [ s contents isNil ] ].
-
 
 	diagonalMoveSquare := (({ square left } , { square right } select: [
 		                        :s | s notNil ]) collect: [ :s |
@@ -78,6 +94,7 @@ MyPawn >> targetSquaresLegal: aBoolean [
 			                     s contents state accept:
 				                     (MyPieceTargetSquareVisitor new strategy:
 					                      'moveEnPassant') ].
+
 
 	^ basicMoveSquare , diagonalMoveSquare , passantMoveSquare select: [
 		  :s | s notNil ]

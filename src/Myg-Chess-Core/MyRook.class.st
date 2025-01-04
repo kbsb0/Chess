@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'accessing' }
+MyRook >> description [
+
+	^ 'rook'
+]
+
+{ #category : 'accessing' }
 MyRook >> id [
 	^ 'R'
 ]

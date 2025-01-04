@@ -185,7 +185,9 @@ MyChessGame >> move: piece to: square [
 		ifFalse: [ ^ self ].
 	piece moveTo: square.
 	self recordMovementOf: piece to: square.
-	self playerColorState nextStatePlayer
+	self playerColorState nextStatePlayer.
+	
+	
 ]
 
 { #category : 'accessing' }
