@@ -106,16 +106,33 @@ space show.
 
 3. **how well is your code tested and how did you do it. Automated testing, mutation testing, manual testing ?**
 
-	Nous avons réalisé des tests unitaires.
-
-	Notre couverture de code par les tests est de 65% environ.
+	* Test manuel :  
+		Tout d'abord, nous avons effectué des tests manuels.  
+		En effet, comme nous disposons d'une interface graphique, il était relativement simple et rapide de vérifier que la fonctionnalité ajoutée semblait fonctionner correctement.
+	* Tests unitaires :  
+		Par ailleurs, nous avons ajouté plusieurs classes de tests unitaires pour nous assurer du bon fonctionnement de nos méthodes.  
+		Ces tests ont été écrits de manière à couvrir différents scénarios et comportements du code.
+	* Test coverage :   
+		Nous avons utilisé les outils abordés en cours pour mesurer la couverture de notre code, qui est actuellement d'environ 66 %.   
+		Cela nous permet de nous assurer qu'une grande partie du code est effectivement testée.
+	* Tests de mutation :  
+		Enfin, nous avons utilisé des tests de mutation pour vérifier l'efficacité de nos tests en termes de détection de bugs.  
+		Ces tests consistent à introduire des erreurs dans le code et à vérifier si nos tests sont capables de les détecter.  
+		En moyenne, nous obtenons un mutation score de 70 %, ce qui indique que nos tests détectent un bon nombre de mutations.
 
 ## Relevant Design Points
 
 1. **Why is the code like this?**
 
 	Nous avons repris en grande partie le code déjà réalisé.  
-	Nous avons choisi de travaillé séparément et de tout regrouper à la fin ce qui est un peu risqué, même si nous nous sommes mis d'accord pour que nous modifions les parties communes que si nécessaire et que nous nous les transmettions. 
+	Nous avons remarqué plusieurs problèmes dans le code qui existait déjà: 
+	* le mouvement des pions mal réalisé
+	* les mouvements en cas d’échec
+	* les mouvements de la tour
+	
+	C’est pour cette raison que nous avons choisi ces katas.
+
+	
 
 2. **Why is this part of the code more tested than the other?**
 
@@ -123,7 +140,10 @@ space show.
 
 3. **Where did you put the priorities?**
 
-	Nous avons choisi de mettre le priorité sur le kata 1 à savoir le déplacement du pion et sur le kata 2 qui est le déplacement du roi en cas d'échec.
+	Nous avons choisi d’avoir en priorité quelque chose de fonctionnel (surtout pour les pièces comme le pion), puis nous avons appliqué du refactoring afin de rendre le code plus lisible, clair et agréable.
+
+	Il fallait être certain que des pièces peuvent se déplacer correctement pour appliquer nos katas.
+
 
 4. **Where did you use (or not) design patterns in the code and why?**
 
