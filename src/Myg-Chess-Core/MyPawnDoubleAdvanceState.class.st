@@ -13,7 +13,8 @@ MyPawnDoubleAdvanceState >> accept: visitor [
 
 { #category : 'as yet unclassified' }
 MyPawnDoubleAdvanceState >> classicalMove [
-	piece state: ((MyPieceMovingState new) piece: piece). 
+
+	piece state: (MyPawnMovingState new piece: piece)
 ]
 
 { #category : 'as yet unclassified' }

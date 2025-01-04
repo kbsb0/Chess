@@ -23,11 +23,16 @@ MyPawn >> id [
 	^ 'P'
 ]
 
+{ #category : 'initialization' }
+MyPawn >> initialize [
+
+	self state: (MyPawnInitialState new piece: self)
+]
+
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
 
 	| nbSquareMove oldFile |
-
 	oldFile := square file.
 	(self legalTargetSquares includes: aSquare)
 		ifFalse: [ ^ self ]
@@ -44,19 +49,7 @@ MyPawn >> moveTo: aSquare [
 
 	nbSquareMove = 2
 		ifTrue: [ self state specialDoubleAdvanceMove ]
-		ifFalse: [ self state classicalMove ].
-		
-	self promotion.
-]
-
-{ #category : 'as yet unclassified' }
-MyPawn >> promotion [
-
-	| promotionObj |
-	promotionObj := MyChessPromotion new.
-	promotionObj piece: self.
-
-	promotionObj show.
+		ifFalse: [ self state classicalMove ]
 ]
 
 { #category : 'rendering' }

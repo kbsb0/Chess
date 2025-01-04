@@ -5,7 +5,8 @@ Class {
 		'host',
 		'window',
 		'pane',
-		'piece'
+		'piece',
+		'choiceHasBeenMade'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -26,12 +27,8 @@ MyChessPromotion >> addPieceChoice: nextPiece [
 		       label: (ToLabel text: nextPiece description);
 		       iconImage: icon;
 		       whenClickedDo: [ :ann |
-			       Transcript
-				       show: nextPiece description;
-				       cr.
 			       self changeWith: nextPiece.
-					 self close.
-			       ].
+			       self close ].
 
 	pane addChild: btn
 ]
@@ -39,43 +36,44 @@ MyChessPromotion >> addPieceChoice: nextPiece [
 { #category : 'adding' }
 MyChessPromotion >> addPiecesChoice [
 
-	piece isWhite
-		ifTrue: [
-			self addPieceChoice: MyBishop white.
-			self addPieceChoice: MyKnight white.
-			self addPieceChoice: MyQueen white.
-			self addPieceChoice: MyRook white ]
-		ifFalse: [
-			self addPieceChoice: MyBishop black.
-			self addPieceChoice: MyKnight black.
-			self addPieceChoice: MyQueen black.
-			self addPieceChoice: MyRook black ]
+	self addPieceChoice: (piece pieceColor createPiece: MyBishop). 
+	self addPieceChoice: (piece pieceColor createPiece: MyKnight).
+	self addPieceChoice: (piece pieceColor createPiece: MyQueen).
+	self addPieceChoice: (piece pieceColor createPiece: MyRook).
 ]
 
 { #category : 'as yet unclassified' }
 MyChessPromotion >> changeWith: newPiece [
+
 	| square |
+	choiceHasBeenMade := true.
 	square := piece square.
 	square contents: newPiece.
 	newPiece square: square.
 	newPiece state classicalMove.
-	
+	newPiece board needPromotion: false.
 ]
 
 { #category : 'initialize-release' }
 MyChessPromotion >> close [
-	window close.
+	self handleChoice.
+	window close
+]
+
+{ #category : 'as yet unclassified' }
+MyChessPromotion >> handleChoice [
+
+	choiceHasBeenMade ifFalse: [
+		self randomChoice ]
 ]
 
 { #category : 'initialization' }
 MyChessPromotion >> initialize [
-
+	choiceHasBeenMade := false.
 	host := BlMorphicWindowHost new.
 	window := BlSpace new.
 
-	pane := pane := ToPane horizontal.
-
-
+	pane := pane := ToPane horizontal
 ]
 
 { #category : 'accessing' }
@@ -88,19 +86,25 @@ MyChessPromotion >> piece: aPiece [
 	piece := aPiece.
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessPromotion >> randomChoice [
+	self changeWith: (piece pieceColor createPiece: MyQueen)
+
+	
+]
+
 { #category : 'initialization' }
 MyChessPromotion >> show [
 
+	self piece square emptyContents.
 	self addPiecesChoice.
 	window
 		in: [ :sp | sp root addChild: pane ];
-		"host: host;"
 		title: host asString;
 		extent: 400 asPoint.
 
 	window show.
 	window when: BlSpaceClosedEvent doOnce: [
-		Transcript
-			show: 'La fenêtre a été fermée';
-			cr ]
+		self close.
+		]
 ]

@@ -7,7 +7,8 @@ Class {
 		'state',
 		'opMove',
 		'moveStrategy',
-		'oppositeMoveStrategy'
+		'oppositeMoveStrategy',
+		'pieceColor'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -18,6 +19,7 @@ MyPiece class >> black [
 
 	^ self new
 		  color: Color black;
+		  pieceColor: MyChessColorBlack new;
 		  moveStrategy: MyPieceMoveStrategyDown new;
 		  oppositeMoveStrategy: MyPieceMoveStrategyUp new;
 		  yourself
@@ -28,6 +30,7 @@ MyPiece class >> white [
 
 	^ self new
 		  color: Color white;
+		  pieceColor: MyChessColorWhite new;
 		  moveStrategy: MyPieceMoveStrategyUp new;
 		  oppositeMoveStrategy: MyPieceMoveStrategyDown new;
 		  yourself
@@ -212,6 +215,17 @@ MyPiece >> oppositeMoveStrategy [
 MyPiece >> oppositeMoveStrategy: anOppositeMoveStrategy [
 
 	oppositeMoveStrategy:= anOppositeMoveStrategy.
+]
+
+{ #category : 'accessing' }
+MyPiece >> pieceColor [
+
+	^ pieceColor
+]
+
+{ #category : 'accessing' }
+MyPiece >> pieceColor: myChessColor [
+	pieceColor := myChessColor.
 ]
 
 { #category : 'rendering' }
