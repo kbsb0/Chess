@@ -62,9 +62,12 @@ MyPawn >> renderPieceOn: aSquare [
 MyPawn >> targetSquaresLegal: aBoolean [
 
 	| basicMoveSquare diagonalMoveSquare passantMoveSquare |
-	
-	basicMoveSquare := { (moveStrategy nextSquare: square) }
-	                   , ((moveStrategy nextSquare: square) notNil
+
+
+	basicMoveSquare := { moveStrategy nextSquare: square }
+	                   ,
+		                   (((moveStrategy nextSquare: square) notNil and: [
+			                     (moveStrategy nextSquare: square) contents isNil ])
 			                    ifTrue: [
 				                    { (self state accept:
 					                     (MyPieceTargetSquareVisitor new strategy:
