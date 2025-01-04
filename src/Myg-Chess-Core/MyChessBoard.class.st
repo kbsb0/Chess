@@ -8,7 +8,8 @@ Class {
 		'state',
 		'whiteColor',
 		'blackColor',
-		'game'
+		'game',
+		'needPromotion'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -112,7 +113,9 @@ MyChessBoard >> initialize [
 		aLayoutConstraints horizontal fitContent.
 		aLayoutConstraints vertical fitContent ].
 
-	self initializeSquares
+	self initializeSquares.
+	
+	self needPromotion: false.
 ]
 
 { #category : 'initialization' }
@@ -224,6 +227,17 @@ MyChessBoard >> locate: coordinate [
 	^ square contents.
 
 
+]
+
+{ #category : 'accessing' }
+MyChessBoard >> needPromotion [
+
+	^ needPromotion 
+]
+
+{ #category : 'accessing' }
+MyChessBoard >> needPromotion: boolean [
+ needPromotion := boolean.
 ]
 
 { #category : 'accessing' }

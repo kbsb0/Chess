@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'accessing' }
+MyBishop >> description [
+
+	^ 'bishop'
+]
+
+{ #category : 'accessing' }
 MyBishop >> id [
 	
 	^ 'B'

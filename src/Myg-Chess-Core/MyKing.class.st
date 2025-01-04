@@ -28,6 +28,12 @@ MyKing >> basicTargetSquares [
 ]
 
 { #category : 'accessing' }
+MyKing >> description [
+
+	^ 'king'
+]
+
+{ #category : 'accessing' }
 MyKing >> id [
 	
 	^ 'K'

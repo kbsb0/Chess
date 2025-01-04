@@ -12,16 +12,27 @@ Class {
 }
 
 { #category : 'accessing' }
+MyPawn >> description [
+
+	^ 'pawn'
+]
+
+{ #category : 'accessing' }
 MyPawn >> id [
 
 	^ 'P'
+]
+
+{ #category : 'initialization' }
+MyPawn >> initialize [
+
+	self state: (MyPawnInitialState new piece: self)
 ]
 
 { #category : 'path commands' }
 MyPawn >> moveTo: aSquare [
 
 	| nbSquareMove oldFile |
-
 	oldFile := square file.
 	(self legalTargetSquares includes: aSquare)
 		ifFalse: [ ^ self ]
@@ -51,17 +62,18 @@ MyPawn >> renderPieceOn: aSquare [
 MyPawn >> targetSquaresLegal: aBoolean [
 
 	| basicMoveSquare diagonalMoveSquare passantMoveSquare |
-	basicMoveSquare := { (moveStrategy nextSquare: square) }
-	                   ,
-		                   { ((moveStrategy nextSquare: square) notNil and: [
-			                    (moveStrategy nextSquare: square) contents
-				                    ifNil: [
-					                    self state accept:
-						                    (MyPieceTargetSquareVisitor new strategy:
-							                     'moveDouble') ]
-				                    ifNotNil: [ nil ] ]) } select: [ :s |
-		                   s notNil and: [ s contents isNil ] ].
 
+
+	basicMoveSquare := { moveStrategy nextSquare: square }
+	                   ,
+		                   (((moveStrategy nextSquare: square) notNil and: [
+			                     (moveStrategy nextSquare: square) contents isNil ])
+			                    ifTrue: [
+				                    { (self state accept:
+					                     (MyPieceTargetSquareVisitor new strategy:
+						                      'moveDouble')) } ]
+			                    ifFalse: [ {  } ]) select: [ :s |
+		                   s notNil and: [ s contents isNil ] ].
 
 	diagonalMoveSquare := (({ square left } , { square right } select: [
 		                        :s | s notNil ]) collect: [ :s |
@@ -78,6 +90,7 @@ MyPawn >> targetSquaresLegal: aBoolean [
 			                     s contents state accept:
 				                     (MyPieceTargetSquareVisitor new strategy:
 					                      'moveEnPassant') ].
+
 
 	^ basicMoveSquare , diagonalMoveSquare , passantMoveSquare select: [
 		  :s | s notNil ]
