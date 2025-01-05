@@ -37,7 +37,7 @@ MyPawnStateTests >> testCorrectStateDoubleAdvanceState [
 	initialState := piece state.
 	piece state classicalMove.
 
-	self assert: piece state class equals: MyPieceMovingState.
+	self assert: piece state class equals: MyPawnMovingState.
 	self assert: initialState ~= piece state.
 
 

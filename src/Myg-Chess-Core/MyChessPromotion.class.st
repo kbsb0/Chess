@@ -35,7 +35,7 @@ MyChessPromotion >> addPieceChoice: nextPiece [
 
 { #category : 'adding' }
 MyChessPromotion >> addPiecesChoice [
-
+	self assert: piece notNil.
 	self addPieceChoice: (piece pieceColor createPiece: MyBishop). 
 	self addPieceChoice: (piece pieceColor createPiece: MyKnight).
 	self addPieceChoice: (piece pieceColor createPiece: MyQueen).
@@ -54,6 +54,11 @@ MyChessPromotion >> changeWith: newPiece [
 	newPiece board needPromotion: false.
 ]
 
+{ #category : 'accessing' }
+MyChessPromotion >> choiceHasBeenMade [
+	^ choiceHasBeenMade
+]
+
 { #category : 'initialize-release' }
 MyChessPromotion >> close [
 	self handleChoice.
@@ -67,6 +72,11 @@ MyChessPromotion >> handleChoice [
 		self randomChoice ]
 ]
 
+{ #category : 'accessing' }
+MyChessPromotion >> host [ 
+	^ host
+]
+
 { #category : 'initialization' }
 MyChessPromotion >> initialize [
 	choiceHasBeenMade := false.
@@ -74,6 +84,11 @@ MyChessPromotion >> initialize [
 	window := BlSpace new.
 
 	pane := pane := ToPane horizontal
+]
+
+{ #category : 'accessing' }
+MyChessPromotion >> pane [
+	^ pane
 ]
 
 { #category : 'accessing' }
@@ -88,6 +103,7 @@ MyChessPromotion >> piece: aPiece [
 
 { #category : 'as yet unclassified' }
 MyChessPromotion >> randomChoice [
+	self assert: piece notNil.
 	self changeWith: (piece pieceColor createPiece: MyQueen)
 
 	
@@ -95,7 +111,6 @@ MyChessPromotion >> randomChoice [
 
 { #category : 'initialization' }
 MyChessPromotion >> show [
-
 	self piece square emptyContents.
 	self addPiecesChoice.
 	window
@@ -107,4 +122,9 @@ MyChessPromotion >> show [
 	window when: BlSpaceClosedEvent doOnce: [
 		self close.
 		]
+]
+
+{ #category : 'accessing' }
+MyChessPromotion >> window [
+	^ window
 ]
