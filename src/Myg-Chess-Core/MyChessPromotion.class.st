@@ -72,6 +72,11 @@ MyChessPromotion >> handleChoice [
 		self randomChoice ]
 ]
 
+{ #category : 'accessing' }
+MyChessPromotion >> host [ 
+	^ host
+]
+
 { #category : 'initialization' }
 MyChessPromotion >> initialize [
 	choiceHasBeenMade := false.
@@ -98,6 +103,7 @@ MyChessPromotion >> piece: aPiece [
 
 { #category : 'as yet unclassified' }
 MyChessPromotion >> randomChoice [
+	self assert: piece notNil.
 	self changeWith: (piece pieceColor createPiece: MyQueen)
 
 	
@@ -116,4 +122,9 @@ MyChessPromotion >> show [
 	window when: BlSpaceClosedEvent doOnce: [
 		self close.
 		]
+]
+
+{ #category : 'accessing' }
+MyChessPromotion >> window [
+	^ window
 ]

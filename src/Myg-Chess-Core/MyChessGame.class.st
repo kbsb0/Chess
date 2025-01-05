@@ -187,9 +187,6 @@ MyChessGame >> move: piece to: square [
 	self recordMovementOf: piece to: square.
 	self playerColorState nextStatePlayer.
 	self changeLastPiece: piece.
-	Transcript
-		show: piece state;
-		cr
 ]
 
 { #category : 'accessing' }

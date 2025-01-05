@@ -3,7 +3,8 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'board',
-		'pawn'
+		'pawn',
+		'promotion'
 	],
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
@@ -15,11 +16,12 @@ MyChessPromotionTests >> initialize [
 	
 	board := MyChessBoard empty.
 	board at: 'c3' put: (pawn := MyPawn white).
+	promotion := MyChessPromotion new.
 ]
 
 { #category : 'tests' }
 MyChessPromotionTests >> testAddPieceChoice [
-	| promotion pieceChoice btn |
+	| pieceChoice btn |
 	
 	promotion := MyChessPromotion new.
 	pieceChoice := pawn.
@@ -31,15 +33,13 @@ MyChessPromotionTests >> testAddPieceChoice [
 
 { #category : 'tests' }
 MyChessPromotionTests >> testAddPiecesChoice [ 
-	| promotion labelTexts expectedlabelTexts myChoiceClass| 
+	| labelTexts expectedlabelTexts myChoiceClass| 
 	
 	promotion := MyChessPromotion new.
 	self should: [ promotion addPiecesChoice. ] raise: Error.
 	
-
 	promotion piece: pawn.
 	promotion addPiecesChoice.
-	
 	
 	labelTexts := promotion pane children collect: [ :child | child labelText ].
 	myChoiceClass := {   MyQueen . MyRook . MyBishop  . MyKnight  }.
@@ -62,7 +62,7 @@ MyChessPromotionTests >> testAddPiecesChoice [
 
 { #category : 'tests' }
 MyChessPromotionTests >> testChangeWith [ 
-	| promotion originalPiece newPiece square|
+	| originalPiece newPiece square|
 
 	promotion := MyChessPromotion new.
 	originalPiece := pawn.
@@ -76,5 +76,44 @@ MyChessPromotionTests >> testChangeWith [
 	self assert: (square contents) equals: newPiece.
 	
 	
+
+]
+
+{ #category : 'tests' }
+MyChessPromotionTests >> testClose [ 
+	promotion := MyChessPromotion new.
+	promotion piece: pawn.
+	promotion close.
+	self assert: (promotion window isOpened) equals: false.
+
+]
+
+{ #category : 'tests' }
+MyChessPromotionTests >> testHandleChoice [ 
+	
+	 promotion piece: pawn. 
+	self assert: (promotion choiceHasBeenMade = false).
+	promotion handleChoice.
+	self assert: (promotion choiceHasBeenMade = true).
+
+]
+
+{ #category : 'tests' }
+MyChessPromotionTests >> testInitialize [ {
+	
+	self assert: (promotion choiceHasBeenMade = false).
+	self assert: (promotion host isNil not).
+	self assert: (promotion window isNil not).
+}
+]
+
+{ #category : 'tests' }
+MyChessPromotionTests >> testRandomChoice [ 
+	| square |
+	
+	promotion piece: pawn.
+	square := pawn square.
+	promotion randomChoice.
+	self assert: (square contents isKindOf: MyQueen).
 
 ]
