@@ -9,7 +9,8 @@ Class {
 MyPawnMovingState >> classicalMove [
 
 	| displayChoice |
-	(piece square file = $8 or: [ piece square file = $1 ]) ifTrue: [
+
+	 (	(piece moveStrategy nextSquare:(piece square)) isNil) ifTrue: [
 		piece board needPromotion: true.
 		piece state: (MyPieceMovingState new piece: piece).
 		displayChoice := MyChessPromotion new.

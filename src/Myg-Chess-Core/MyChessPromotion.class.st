@@ -35,7 +35,7 @@ MyChessPromotion >> addPieceChoice: nextPiece [
 
 { #category : 'adding' }
 MyChessPromotion >> addPiecesChoice [
-
+	self assert: piece notNil.
 	self addPieceChoice: (piece pieceColor createPiece: MyBishop). 
 	self addPieceChoice: (piece pieceColor createPiece: MyKnight).
 	self addPieceChoice: (piece pieceColor createPiece: MyQueen).
@@ -52,6 +52,11 @@ MyChessPromotion >> changeWith: newPiece [
 	newPiece square: square.
 	newPiece state classicalMove.
 	newPiece board needPromotion: false.
+]
+
+{ #category : 'accessing' }
+MyChessPromotion >> choiceHasBeenMade [
+	^ choiceHasBeenMade
 ]
 
 { #category : 'initialize-release' }
@@ -77,6 +82,11 @@ MyChessPromotion >> initialize [
 ]
 
 { #category : 'accessing' }
+MyChessPromotion >> pane [
+	^ pane
+]
+
+{ #category : 'accessing' }
 MyChessPromotion >> piece [
 ^ piece 
 ]
@@ -95,7 +105,6 @@ MyChessPromotion >> randomChoice [
 
 { #category : 'initialization' }
 MyChessPromotion >> show [
-
 	self piece square emptyContents.
 	self addPiecesChoice.
 	window

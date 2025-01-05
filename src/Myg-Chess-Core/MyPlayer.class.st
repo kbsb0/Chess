@@ -70,7 +70,7 @@ MyPlayer >> play [
 
 	handlers
 		detect: [ :handler | handler handleRequest: self ]
-		ifNone: [ self halt: 'NO MOVES AVAILABLE!' ]
+		ifNone: [ "self halt: 'NO MOVES AVAILABLE!'" ]
 ]
 
 { #category : 'as yet unclassified' }
