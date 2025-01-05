@@ -125,6 +125,8 @@ space show.
 		Ces tests consistent à introduire des erreurs dans le code et à vérifier si nos tests sont capables de les détecter.  
 		En moyenne, nous obtenons un mutation score de 70 %, ce qui indique que nos tests détectent un bon nombre de mutations.
 
+	Remarque: les tests sont localisés dans le package `Myg-Chess-Tests`.
+
 ## Relevant Design Points
 
 1. **Why is the code like this?**
