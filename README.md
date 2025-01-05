@@ -1,5 +1,9 @@
 # Myg Chess Game
 
+## Khadija Besbas
+## Cyril Godet
+## Alexandre Bou
+
 This is a chess game for Pharo based on Bloc, Toplo and Myg.
 
 ## What is this repository really about
@@ -91,6 +95,10 @@ space show.
 			faire alors dans ce cas.  
 			Mais il a fallu aussi conserver la logique actuelle lorsqu’il n’y a pas d’échec.
 
+			Nous avons également souhaité mettre en place un ordre pour que si plusieurs logiques sont possibles, on commence par la capture puis le blocage et enfin le roi se déplace.
+
+			Pour résoudre ce problème, Guille nous a conseillé d'utiliser le design pattern chain of responsibility qui ressemble a design pattern state mais avec un ordre d'exécution.
+
 		* **Promotion des pions** :  
 		La principale difficulté de ce kata résidait dans la compréhension des objets utilisés pour l'affichage.  
 		Nous avons d'abord commencé par comprendre et réaliser des exercices simples d'affichage (par exemple, afficher un bouton, générer un comportement lors d'un clic, etc.).  
@@ -135,7 +143,6 @@ space show.
 	Nous avons remarqué plusieurs problèmes dans le code qui existait déjà: 
 	* le mouvement des pions mal réalisé
 	* les mouvements en cas d’échec
-	* les mouvements de la tour
 	
 	C’est pour cette raison que nous avons choisi ces katas.
 
@@ -144,6 +151,7 @@ space show.
 
 	De plus, nous avons cherché à refactoriser notre code du mieux possible, en utilisant des design patterns, par exemple. Cependant, il se peut que certains choix n'ont pas été généralisés à d’autres parties du code afin de ne pas "tout casser".
 
+	
 
 	***Ce qui a été corrigé:***
     - **La prise en passant**: les mouvements de base des pions, l'attaque en diagonale, ainsi que la prise en passant lorsqu'elle se présente.
@@ -152,7 +160,8 @@ space show.
 
     - **Gestion du tour par tour** : nous avons ajouté une gestion du tour de jeu. Ainsi, au démarrage de la partie, ce sont les pièces blanches qui peuvent être déplacées. Il n'est plus possible de déplacer une pièce d'une couleur si ce n'est pas son tour.
 
-	
+	*Remraque*: concernant le kata Restrict legal moves, il nous pensions que le kata fonctionnait avec les autres kata.  
+	Cependant, lorsque nous l'exécutons dans le jeu, le kata fonctionne correctement avec le bouton play mais pas avec le jeu d'échec puisque le jeu reste avec l'implémentation initiale et ne prend pas en compte les modifications apportées par les autres katas.
 
 
 2. **Why is this part of the code more tested than the other?**
@@ -191,11 +200,11 @@ space show.
 
 	![PromotionChoice](img/PromotionChoice.png)
 
-	La première evrsion de notre code présentait trop de répétitions. La seule différence entre les pièces à créer était leur couleur. Nous avons donc ajouté la classe *MyChessColor* , qui représente la stratégie associé à la couleur de la pièce. Cet objet possède un message `createPiece:` qui, lorsqu'on lui passe la classe d'une pièce, renvoie une instance de cette pièce avec le type correspondant et la même couleur que celle définie par la stratégie.
+	La première version de notre code présentait trop de répétitions. La seule différence entre les pièces à créer était leur couleur. Nous avons donc ajouté la classe *MyChessColor* , qui représente la stratégie associé à la couleur de la pièce. Cet objet possède un message `createPiece:` qui, lorsqu'on lui passe la classe d'une pièce, renvoie une instance de cette pièce avec le type correspondant et la même couleur que celle définie par la stratégie.
 
 	Ainsi, si on a par exemple un pion noir, dont la stratégy est une instance de la classe `MyChessColorBlack`, le message ```pawn pieceColor createPiece: MyQueen``` renverra un objet `MyQueen` de la couleur noir.
 
-    	Ce pattern nous a permis de savoir, pour une case donné, si la case au dessus ou la case en dessous était occupé ou non. Celà nous a servi pour pouvoir faire la prise en passant car nous pouvions faire si la case derrière était encore libre. 
+    	Ce pattern nous a permis de savoir, pour une case donnée, si la case au dessus ou la case en dessous était occupé ou non. Celà nous a servi pour pouvoir faire la prise en passant car nous pouvions faire si la case derrière était encore libre. 
   
 
 
@@ -203,7 +212,7 @@ space show.
 
 	Ce pattern nous a permis d'appliquer un ordre dans l'exécution du kata.  
 
-	En effet, grâce à ce pattern, lorsque le roi est en échec, le jeu décide d'appliquer la logique de capturer une pièce,   
+	En effet, grâce à ce pattern, lorsque le roi est en échec, le jeu décide d'appliquer d'abord la logique de capturer une pièce,   
 	puis si ce n'est pas possible, il applique la logique de bloquer la pièce menaçante avec une pièce du joueur qui peut jouer.  
 	Sinon c'est le roi qui doit se déplacer en dernier recours.  
 	Enfin il y a aussi un état par défaut qui conserve la logique qui était déjà existante lorsqu'il n'y a pas d'échec : une pièce aléatoire du joueur qui doit jouer se déplace. 
