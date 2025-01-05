@@ -52,33 +52,34 @@ space show.
 2. **what difficulties you encountered and how you solved them ?**
 
 	Nous avons rencontré plusieurs difficultés :   
-	* Langage pharo :   
+	* *Langage pharo* :   
 		Le projet a été réalisé en pharo qui est un nouveau langage pour nous.   
 		Même si son fonctionnement est similaire au langage orienté objet que nous connaissons déjà ( comme java ), sa syntaxe particulière n’a pas été facile à prendre en main.  
-		Nous avons donc dû dans un premier temps nous documenter sur ce langage.
+		Nous avons donc dû dans un premier temps nous documenter sur ce langage, et faire des exercices our nous familiariser avec.
 
-	* Compréhension du code fourni :  
+	* *Compréhension du code fourni* :  
 	Pour réaliser nos katas, nous disposions d'une base de code préexistante.  
 	Étant donné que nous n’avions pas écrit ce code, nous avons dû consacrer du temps à analyser son fonctionnement, à comprendre l’utilité de chaque classe, fonction, etc.   
 	Pour mieux comprendre le code, nous avons utilisé les principes vus en cours, notamment le Reverse Engineering.  
 	C'est-à-dire, en regardant une partie du code (celle qui nous intéressait sur les pièces et le jeu),  puis aussi en regardant les tests pour savoir ce que faisait le code.
 
-	* Jeu d’échecs :  
+	* *Jeu d’échecs* :  
 	Nous avons passé du temps à comprendre nos katas ( quels étaient les objectifs ).  
 	Ne connaissant pas entièrement bien le jeu des échecs, nous avons dû aussi nous documenter ( pour la prise en passant notamment ).
 
 
-	* Kata :  
-	La réalisation des katas à générer plusieurs difficulté : 
-		* Prise en passant:  
-		Nous avons rencontré plusieurs difficultés pour écrire un code "propre".  
-		En effet, après avoir pris le temps de comprendre le code existant, nous avons réussi rapidement à avancer sur le kata.  
-		Cependant, ce code nécessitait une refactorisation à cause de duplications. Par exemple, la gestion des couleurs des pions était souvent réalisée à l’aide de conditions comme piece isWhite ifTrue:[] ifFalse:[].  
-		De plus, le code était difficile à maintenir, car plusieurs conditions dépendaient du contexte spécifique du jeu.  
-		Par exemple, l’état d’un pion était directement lié à sa position sur le plateau (ligne 5), ce qui poserait problème dans un jeu personnalisé où ce comportement pourrait ne plus être valide.  
-		Le code était donc à la fois peu clair et peu maintenable.
-		Pour résoudre ces problèmes, nous avons cherché différentes solutions, en cherchant quel design pattern pourrait être utilisé pour améliorer la lisibilité et la maintenabilité du code.  
-		Cela nous a permis d’adopter des solutions plus flexibles et de limiter les dépendances au contexte du jeu.
+	* *Kata* :  
+	La réalisation des katas à générer plusieurs difficultés : 
+		* **La prise en passant:**  
+	La prise en passant est une règle particulière que les pions peuvent utiliser uniquement dans certaines situations spécifiques. Au départ de la partie, le mouvement des pions n’était pas adapté à cette règle. La première difficulté a été de corriger les mouvements afin qu’ils puissent avancer d'une case, et exceptionnellement de deux cases s’ils n’avaient jamais bougé. De plus, les pions ne peuvent attaquer qu’en diagonale. Il a fallu comprendre quelles méthodes intervenaient dans les mouvements des pions et identifier les éléments impactant la partie graphique.
+
+			Ensuite, nous avons abordé la prise en passant. L’une des difficultés majeures a été de déterminer comment détecter la situation dans laquelle un pion peut effectuer cette prise. Il était nécessaire de connaître les cases concernées, leur contenu (allié ou ennemi ?) et leur état (le pion a-t-il avancé d’une ou deux cases ?). Cette tâche a été complexe et a pris du temps. De plus, certains cas particuliers n’avaient pas été pris en compte, comme le fait qu’un pion ne peut pas sauter par-dessus une autre pièce s’il se trouve sur sa case de départ, ou encore le fait que la prise en passant ne peut plus être effectuée si elle n’a pas été réalisée immédiatement après le mouvement du pion adverse.
+
+			Enfin, les dernières difficultés rencontrées concernaient l’écriture d’un code « propre ». Après avoir écrit un code fonctionnel, il été nécessaire de le refactoriser en raison de duplications. Par exemple, la gestion des couleurs des pions était souvent réalisée à l’aide de conditions telles que piece isWhite ifTrue:[] ifFalse:[]. De plus, le code était difficile à maintenir, car plusieurs conditions dépendaient du contexte spécifique du jeu. Par exemple, l’état d’un pion était directement lié à sa position sur le plateau (ligne 5), ce qui poserait problème dans un jeu personnalisé où ce comportement pourrait ne plus être valide. Le code était donc à la fois peu clair et peu maintenable.
+
+			Pour résoudre ces problèmes, nous avons exploré différentes solutions et cherché quel design pattern pourrait être utilisé pour améliorer la lisibilité et la maintenabilité du code. Cela nous a permis d’adopter des solutions plus flexibles et de limiter les dépendances au contexte du jeu.
+
+
 		* Logiques d’échec:  
 		ll existe plusieurs façons de contrer un échec: 
 			1. Soit une pièce peut capturer la pièce menaçante 
@@ -132,11 +133,27 @@ space show.
 	
 	C’est pour cette raison que nous avons choisi ces katas.
 
+
+	Dans le projet de base, plusieurs éléments nécessitaient des corrections, notamment les mouvements des pièces. Pour faciliter notre travail, nous avons isolé les parties du code directement liées à notre kata. Nous avons ainsi corrigé, par exemple, les mouvements des pions, qui interviennent dans la prise en passant et la promotion. En revanche, nous n'avons pas modifié les mouvements de la tour ou de la dame.
+
+	De plus, nous avons cherché à refactoriser notre code du mieux possible, en utilisant des design patterns, entre autres. Cependant, il se peut que certains choix n’aient pas été généralisés à d’autres parties du code afin de ne pas "tout casser".
+
+
+	Ce qui a été corrigé :
+
+    	La prise en passant : les mouvements de base des pions, l'attaque en diagonale, ainsi que la prise en passant lorsqu'elle se présente.
+
+    	La promotion : lorsqu’un pion atteint la dernière ligne, il peut être promu. Une fenêtre s'ouvre pour permettre de choisir la nouvelle pièce. Nous avons géré le cas où, si l'utilisateur ferme la fenêtre sans faire de choix, un choix par défaut est effectué (le pion se transforme en dame). De même, si le pion est promu suite à un mouvement automatique, le choix est également fait par défaut.
+
+    	Gestion du tour par tour : nous avons ajouté une gestion du tour de jeu. Ainsi, au démarrage de la partie, ce sont les pièces blanches qui peuvent être déplacées. Il n'est plus possible de déplacer une pièce d'une couleur si ce n'est pas son tour.
+
 	
+
 
 2. **Why is this part of the code more tested than the other?**
 
-	Nous avons choisi de tester les parties du code que nous avons ajouté en négligeant le code qui est déjà implémenté
+	Nous avons choisi de tester les parties du code que nous avons ajouté en négligeant le code qui est déjà implémenté.
+	Pendant la réalisation de nos katas
 
 3. **Where did you put the priorities?**
 
