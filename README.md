@@ -97,7 +97,7 @@ space show.
 		Pour approfondir nos connaissances, nous avons cherché où les classes liées à l'affichage étaient utilisées et avons trouvé des tests existants dans Pharo qui montraient des exemples d'utilisation.  
 		Ces tests nous ont permis de comprendre comment créer une fenêtre et ajouter les éléments souhaités.
 		
-	![ExempleUtilisationButon](img\ExempleUtilisationButon.png)
+	![ExempleUtilisationButon](img/ExempleUtilisationButon.png)
 
 	La deuxième difficulté a été de différencier les cas où le joueur effectue le mouvement du pion manuellement et ceux où le mouvement est effectué automatiquement.  
 		Il a été compliqué de cerner quelles fonctions étaient appelées uniquement dans le cas du mouvement automatique.  
@@ -171,7 +171,7 @@ space show.
 	**MyPieceState:**
 	Pour pouvoir gérer au mieux les cas de prise en passant, il était nécessaire de marquer les pions d'un état. On a donc le schéma suivant pour la gestion des états : 
 
-	![MyPieceMoveState](img\MyPieceMoveState.png)
+	![MyPieceMoveState](img/MyPieceMoveState.png)
 
 	Ainsi, si le pion n'a pas encore bougé il est dans l'état `inital`, s'il avance de deux cases il passe dans l'état `double avancée`. Enfin, pour tout autre mouvement il sera dans l'état `en mouvement`.
 	Mettre en place le pattern state a permis de simplifier grandement le code, en délégant l'évolution de l'état directement à l'objet state en question. De plus, si dans une possible évolution, les pions ( ou d'autres pieces ) peuvent être dans un nouvel état, on ne devra qu'ajouter une nouvelle classe. 
@@ -209,7 +209,7 @@ space show.
 	L'avantage de ce design pattern dans ce cas est que le code est ainsi décomposé dans plusieurs classes (une pour chaque logique).  
 	Il est donc plus facile d'ajouter une nouvelle logique pour contrer l'échec et ces logiques ne sont pas regroupées dans une seule méthode qui serait beaucoup moins lisible. 
 
-	![ChainOfResponsibility](img\ChainOfResponsibility.png)
+	![ChainOfResponsibility](img/ChainOfResponsibility.png)
 
 * **Visitor**(pour le kata Fix pawn moves!)
 
@@ -218,7 +218,7 @@ space show.
 	Remarques : 
 	Voici un exemple de comment on procède pour savoir si une prise en passant est possible : 
 
-	![PriseEnPassant](img\PriseEnPassant.png)
+	![PriseEnPassant](img/PriseEnPassant.png)
 
 
 	Le pion noir qui se trouve dans la case h5 vient d'avancer de deux cases. 
@@ -226,4 +226,4 @@ space show.
 
 	Nous avons choisi d'utiliser des chaînes de caractères pour spécifier la stratégie dans les fonctions du Visitor, car cela simplifie le code et le rend plus direct. Néanmoins, il pourrait être plus pertinent d'utiliser le design pattern Strategy pour améliorer la flexibilité et la maintenabilité de notre code.
 
-	![Visitor](img\Visitor.png)
+	![Visitor](img/Visitor.png)
