@@ -118,8 +118,8 @@ space show.
 		Par ailleurs, nous avons ajouté plusieurs classes de tests unitaires pour nous assurer du bon fonctionnement de nos méthodes.  
 		Ces tests ont été écrits de manière à couvrir différents scénarios et comportements du code.
 	* **Test coverage** :   
-		Nous avons utilisé les outils abordés en cours pour mesurer la couverture de notre code, qui est actuellement d'environ 60 %.   
-		Cela nous permet de nous assurer qu'une grande partie du code est effectivement testée.
+		Nous avons utilisé les outils abordés en cours pour mesurer la couverture de notre code, qui est actuellement d'environ 50 %.   
+		Le score n'est pas élevé, mais il est en partie justifier par le fait que nous avons beaucoup de getter et de setter, que nous avons fait le choix de ne pas tester.
 	* **Tests de mutation** :  
 		Enfin, nous avons utilisé des tests de mutation pour vérifier l'efficacité de nos tests en termes de détection de bugs.  
 		Ces tests consistent à introduire des erreurs dans le code et à vérifier si nos tests sont capables de les détecter.  
