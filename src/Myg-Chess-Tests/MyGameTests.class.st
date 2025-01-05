@@ -6,6 +6,20 @@ Class {
 }
 
 { #category : 'tests' }
+MyGameTests >> testChangeLastPieceWithLastPieceNill [
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"
+
+	| game pawn|
+	game := MyChessGame initialize .
+	pawn := MyPawn white.
+	game changeLastPiece: pawn.
+	
+	self assert: (game lastPiece) equals: pawn.
+	
+]
+
+{ #category : 'tests' }
 MyGameTests >> testMoveTo [
 
 	| game board actualSquare targetSquare piece |
