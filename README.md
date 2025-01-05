@@ -193,6 +193,8 @@ space show.
 
 	Ainsi, si on a par exemple un pion noir, dont la stratégy est une instance de la classe `MyChessColorBlack`, le message ```pawn pieceColor createPiece: MyQueen``` renverra un objet `MyQueen` de la couleur noir.
 
+    	Ce pattern nous a permis de savoir, pour une case donné, si la case au dessus ou la case en dessous était occupé ou non. Celà nous a servi pour pouvoir faire la prise en passant car nous pouvions faire si la case derrière était encore libre. 
+  
 
 
 * **Chain of responsibility** (pour le kata Restrict legal moves)

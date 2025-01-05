@@ -6,6 +6,38 @@ Class {
 }
 
 { #category : 'tests' }
+MyKingTest >> testIsChechMatedWhenItSFalse [
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"
+
+	| king board |
+	board := MyChessBoard empty.
+	board at: 'e8' put: (king := MyKing white).
+	
+	board at: 'd6' put: (MyQueen black ).
+	
+	self deny: king isCheckMated.
+	
+	
+	
+]
+
+{ #category : 'tests' }
+MyKingTest >> testIsChechMatedWhenItSTrue [
+	"comment stating purpose of instance-side method"
+	"scope: class-variables  &  instance-variables"
+
+	| king board |
+	board := MyChessBoard empty.
+	board at: 'e8' put: (king := MyKing white).
+	
+	board at: 'd6' put: (MyQueen black ).
+	board at: 'e5' put: (MyKnight black ).
+	
+	self deny: king isCheckMated.
+]
+
+{ #category : 'tests' }
 MyKingTest >> testIsCheckByOpponentsRook [
 
 	| king board |
