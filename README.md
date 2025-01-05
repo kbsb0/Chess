@@ -177,8 +177,10 @@ space show.
 	Ce pattern va nous servir pour appeler le visiteur (méthode accept).  
 	Nous avons dons choisi d'utiliser une composition.  
 
-* **Strategy** pour le déplacement du pion 
+* **Strategy** pour le déplacement du pion
 
+    	Ce pattern nous a permis de savoir, pour une case donné, si la case au dessus ou la case en dessous était occupé ou non. Celà nous a servi pour pouvoir faire la prise en passant car nous pouvions faire si la case derrière était encore libre. 
+  
 
 * **Chain of responsibility** pour le kata Restrict legal moves
 
